@@ -96,7 +96,7 @@ The system automatically applies relevant labels from:
 
 4. **Import and Configure Workflow**
 
-   **IMPORTANT: The public workflow file requires you to replace these placeholders:**
+   **IMPORTANT: This public workflow file requires you to replace these placeholders:**
 
    - Open `n8n/workflows/GRC_News_Assistant_3_PUBLIC.json` in a text editor
    - Replace ALL occurrences of:
@@ -157,7 +157,7 @@ The workflow runs automatically every day at 5 AM, processing articles from the 
 - Use Labels to find specific topics
 - Sort by Quality Score for relevance
 
-## 🔧 Configuration
+## Configuration
 
 ### Adjusting Date Ranges
 Edit the "Check Publication Date" nodes to modify how far back to look for articles:
