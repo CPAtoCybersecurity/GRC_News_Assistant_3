@@ -48,7 +48,7 @@
 |Schedule Trigger|Automation Component|n8n Internal|Daily execution at 5:00 AM|
 
 ### Data Flow Diagram
-![GRC News Assistant 3.0 Workflow](https://raw.githubusercontent.com/CPAtoCybersecurity/GRC_News_Assistant_3/main/workflow.png)
+![GRC News Assistant 3.0 Workflow](workflow.png)
 
 ```
 RSS Feeds → Date Filter → Content Extraction → HTTP GET →
