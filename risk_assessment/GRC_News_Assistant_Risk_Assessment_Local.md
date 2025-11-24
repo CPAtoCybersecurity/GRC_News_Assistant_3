@@ -1,4 +1,42 @@
+
 # Cybersecurity Risk Assessment
+
+## Contents
+- [Executive Summary](#executive-summary)
+- [1. Requestor Information](#1-requestor-information)
+- [2. Business Objective](#2-business-objective)
+- [3. Architecture & Deployment Details](#3-architecture--deployment-details)
+  - [Components](#components)
+  - [Data Flow Diagram](#data-flow-diagram)
+  - [Assets](#assets)
+- [4. GOVERN (GV) - Governance & Risk Strategy](#4-govern-gv---governance--risk-strategy)
+  - [4.1 Organizational Context (GV.OC)](#41-organizational-context-gvoc)
+  - [4.2 Policy (GV.PO)](#42-policy-gvpo)
+  - [4.4 Supply Chain Risk Management (GV.SC)](#44-supply-chain-risk-management-gvsc)
+- [5. IDENTIFY (ID) - Asset Management & Risk Assessment](#5-identify-id---asset-management--risk-assessment)
+  - [5.1 Asset Management (ID.AM)](#51-asset-management-idam)
+  - [5.2 Risk Assessment (ID.RA)](#52-risk-assessment-idra)
+- [6. PROTECT (PR) - Security Controls](#6-protect-pr---security-controls)
+  - [6.1 Identity Management & Access Control (PR.AA)](#61-identity-management--access-control-praa)
+  - [6.2 Data Security (PR.DS)](#62-data-security-prds)
+  - [6.3 Platform Security (PR.PS)](#63-platform-security-prps)
+  - [6.4 Infrastructure Resilience (PR.IR)](#64-infrastructure-resilience-prir)
+- [7. DETECT (DE) - Monitoring & Detection](#7-detect-de---monitoring--detection)
+  - [7.1 Continuous Monitoring (DE.CM)](#71-continuous-monitoring-decm)
+  - [7.2 Adverse Event Analysis (DE.AE)](#72-adverse-event-analysis-deae)
+- [8. RESPOND (RS) - Incident Response](#8-respond-rs---incident-response)
+  - [8.1 Incident Management (RS.MA)](#81-incident-management-rsma)
+  - [8.2 Incident Analysis (RS.AN)](#82-incident-analysis-rsan)
+- [9. RECOVER (RC) - Recovery & Resilience](#9-recover-rc---recovery--resilience)
+  - [9.1 Recovery Planning (RC.RP)](#91-recovery-planning-rcrp)
+- [11. Risk Assessment](#11-risk-assessment)
+  - [Top 5 Threat Scenarios](#top-5-threat-scenarios)
+  - [Risk Matrix](#risk-matrix)
+- [12. Action Items](#12-action-items)
+  - [Option A: Virtual Machine Migration](#option-a-virtual-machine-migration-65-risk-reduction)
+  - [Option B: n8n Cloud Migration](#option-b-n8n-cloud-migration-85-risk-reduction)
+  - [Post-Migration Security Hardening](#post-migration-security-hardening)
+- [Risk Assessment Approval](#risk-assessment-approval)
 
 ### Executive Summary
 
