@@ -44,6 +44,7 @@
 ### Components
 
 ![GRC News Assistant 3.0 Deployment](n8n_Deployment.png)
+https://app.excalidraw.com/l/1U6BgkXrdYQ/1NxRV12zBlm
 
 |Component|Type|Location|Description|
 |---|---|---|---|
