@@ -16,6 +16,8 @@ An intelligent Governance, Risk, and Compliance (GRC) news aggregation system th
 - **Business Context Focus**: Prioritizes business-friendly security content
 - **Automated Workflow**: Scheduled daily processing at 5 AM
 
+![GRC News Assistant 3.0 Workflow](workflow.png)
+
 ## Rating System
 
 | Tier | Description | Criteria |
