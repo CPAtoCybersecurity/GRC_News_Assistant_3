@@ -266,19 +266,22 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 
 ## 11. Risk Assessment
 
-### Top 5 Threat Scenarios
+### Threat Scenarios
 
 | Threat # | Threat Scenario                                                                                                                                   | Impact (lower for VM and SaaS due to containment) | Likelihood               | Residual Risk (Docker, Localhost) | Residual Risk (VM) | Residual Risk (SaaS) |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------ | --------------------------------- | ------------------ | -------------------- |
 | T001     | **Supply Chain Attack via Malicious Package** - Compromised npm package or typosquatting attack installs backdoor, potentially escaping container | **High**                                          | **Moderate to Very Low** | **Moderate**                      | **Low**            | **Very Low**         |
-| T002     | **Container Escape to Host System** - Exploiting Docker vulnerabilities or misconfigurations to access host filesystem and credentials            | **High to N/A**                                   | **Low**                  | **Low**                           | **N/A**            | **N/A**              |
-| T003     | **Prompt Injection Attack** - Malicious RSS content manipulates AI to execute unintended actions or leak API credentials                          | **High to Very Low**                              | **Low**                  | **Low**                           | **Low**            | **Very Low**         |
-| T004     | **Remote Code Execution via Dependencies** - Known CVEs in npm packages (vm2, lodash, axios) allow code execution within container                | **High to Low**                                   | **Moderate to Very Low** | **Moderate**                      | **Low**            | **Very Low**         |
-
-![LLM01-LLM02](LLM01-LLM02.png)
-https://app.excalidraw.com/l/1U6BgkXrdYQ/1NxRV12zBlm
+| T002     | **Remote Code Execution via Dependencies** - Known CVEs in npm packages (vm2, lodash, axios) allow code execution within container                | **High to Low**                                   | **Moderate to Very Low** | **Moderate**                      | **Low**            | **Very Low**         |
+| T003     | **Container Escape to Host System** - Exploiting Docker vulnerabilities or misconfigurations to access host filesystem and credentials            | **High to N/A**                                   | **Low**                  | **Low**                           | **N/A**            | **N/A**              |
 
 ![LLM03](LLM03.png)
+https://app.excalidraw.com/l/1U6BgkXrdYQ/1NxRV12zBlm
+
+| Threat # | Threat Scenario                                                                                                                                   | Impact (lower for VM and SaaS due to containment) | Likelihood               | Residual Risk (Docker, Localhost) | Residual Risk (VM) | Residual Risk (SaaS) |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------ | --------------------------------- | ------------------ | -------------------- |
+| T004     | **Prompt Injection Attack** - Malicious RSS content manipulates AI to execute unintended actions or leak API credentials                          | **High to Very Low**                              | **Low**                  | **Low**                           | **Low**            | **Very Low**         |
+
+![LLM01-LLM02](LLM01-LLM02.png)
 https://app.excalidraw.com/l/1U6BgkXrdYQ/1NxRV12zBlm
 
 ### Risk Matrix
