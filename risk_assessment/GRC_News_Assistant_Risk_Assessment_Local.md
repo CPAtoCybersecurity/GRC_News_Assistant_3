@@ -90,7 +90,7 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 |#|Question|Yes (Lower Risk)|No (Higher Risk)|Not Applicable|Comments|
 |---|---|---|---|---|---|
 |**GV.SC-02**|Are all LLM providers (OpenAI, Anthropic, etc.) and integrated tools security-vetted?|X|||Anthropic and Notion are established vendors with security programs|
-|**GV.SC-02**|Is there a review process before installing community nodes?|||X|No community nodes detected in workflow|
+|**GV.SC-02**|Is there a review process before installing community nodes?|||X|No community nodes|
 
 ## 5. IDENTIFY (ID) - Asset Management & Risk Assessment
 
@@ -225,7 +225,7 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 
 |                     |              |          | LEVEL OF IMPACT |          |               |
 | ------------------- | ------------ | -------- | --------------- | -------- | ------------- |
-| **LIKELIHOOD*<br>** | **Very low** | **Low**  | **Moderate**    | **High** | **Very High** |
+| **LIKELIHOOD*** | **Very low** | **Low**  | **Moderate**    | **High** | **Very High** |
 | **Very High**       | Very Low     | Low      | Moderate        | High     | Very High     |
 | **High**            | Very Low     | Low      | Moderate        | High     | Very High     |
 | **Moderate**        | Very Low     | Low      | Moderate        | Moderate | High          |
@@ -267,10 +267,10 @@ Risk assessment methodology from: [NIST SP 800-30 Rev. 1: Guide for Conducting R
 
 |Role|Name|Signature|Date|
 |---|---|---|---|
-|Security Assessor|Sarah Chen, Senior Security Analyst|_________________|November 23, 2025|
-|Application Owner|Steve Johnson, GRC Director|_________________|November 23, 2025|
-|Business Sponsor|Michael Torres, CISO|_________________|November 23, 2025|
-|CISO/Security Lead|Michael Torres, CISO|_________________|November 23, 2025|
+|Security Assessor||_________________||
+|Application Owner||_________________||
+|Business Sponsor||_________________||
+|CISO/Security Lead||_________________||
 
 ---
 
