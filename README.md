@@ -277,4 +277,4 @@ MIT License - see [LICENSE](./LICENSE) file for details
 - Built with [n8n](https://n8n.io) workflow automation
 - Powered by [Anthropic Claude](https://anthropic.com) AI
 - Inspired by the Simply Cyber Community, Dr. Gerald Auger, Daniel Miessler, Network Chuck, John Hammond
-- RSS sources for providing valuable security content
+- RSS sources
