@@ -238,8 +238,10 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 | T004     | **Remote Code Execution via Dependencies** - Known CVEs in npm packages (vm2, lodash, axios) allow code execution within container                | **High to Low**                                   | **Moderate to Very Low** | **Moderate**                      | **Low**            | **Very Low**         |
 
 ![LLM01-LLM02](LLM01-LLM02.png)
+https://app.excalidraw.com/l/1U6BgkXrdYQ/1NxRV12zBlm
 
 ![LLM03](LLM03.png)
+https://app.excalidraw.com/l/1U6BgkXrdYQ/1NxRV12zBlm
 
 ### Risk Matrix
 
