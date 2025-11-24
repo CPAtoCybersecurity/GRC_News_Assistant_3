@@ -267,7 +267,7 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 ## 11. Risk Assessment
 
 ### Threat Scenarios
-
+_(Risk Level = Likelihood x Impact)_
 | Threat # | Threat Scenario                                                                                                                                   | Impact (lower for VM and SaaS due to containment) | Likelihood               | Residual Risk (Docker, Localhost) | Residual Risk (VM) | Residual Risk (SaaS) |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------ | --------------------------------- | ------------------ | -------------------- |
 | T001     | **Supply Chain Attack via Malicious Package** - Compromised npm package or typosquatting attack installs backdoor, potentially escaping container | **High**                                          | **Moderate to Very Low** | **Moderate**                      | **Low**            | **Very Low**         |
