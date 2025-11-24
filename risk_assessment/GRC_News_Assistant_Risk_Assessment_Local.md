@@ -30,7 +30,7 @@
 - [9. RECOVER (RC) - Recovery & Resilience](#9-recover-rc---recovery--resilience)
   - [9.1 Recovery Planning (RC.RP)](#91-recovery-planning-rcrp)
 - [11. Risk Assessment](#11-risk-assessment)
-  - [Top 5 Threat Scenarios](#top-5-threat-scenarios)
+  - [Threat Scenarios](#threat-scenarios)
   - [Risk Matrix](#risk-matrix)
 - [12. Action Items](#12-action-items)
   - [Option A: Virtual Machine Migration](#option-a-virtual-machine-migration-65-risk-reduction)
