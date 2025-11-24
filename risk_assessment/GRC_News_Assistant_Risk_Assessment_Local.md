@@ -236,6 +236,11 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 | T002     | **Container Escape to Host System** - Exploiting Docker vulnerabilities or misconfigurations to access host filesystem and credentials            | **High to N/A**                                   | **Low**                  | **Low**                           | **N/A**            | **N/A**              |
 | T003     | **Prompt Injection Attack** - Malicious RSS content manipulates AI to execute unintended actions or leak API credentials                          | **High to Very Low**                              | **Low**                  | **Low**                           | **Low**            | **Very Low**         |
 | T004     | **Remote Code Execution via Dependencies** - Known CVEs in npm packages (vm2, lodash, axios) allow code execution within container                | **High to Low**                                   | **Moderate to Very Low** | **Moderate**                      | **Low**            | **Very Low**         |
+
+![LLM01-LLM02](LLM01-LLM02.png)
+
+![LLM03](LLM03.png)
+
 ### Risk Matrix
 
 |                     |              |          | LEVEL OF IMPACT |          |               |
