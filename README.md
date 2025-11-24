@@ -22,8 +22,8 @@ An intelligent Governance, Risk, and Compliance (GRC) news aggregation system th
 
 | Tier | Description | Criteria |
 |------|-------------|----------|
-| **S Tier** | Must Consume Within a Week | 18+ ideas, STRONG theme matching |
-| **A Tier** | Should Consume This Month | 15+ ideas, GOOD theme matching |
+| **S Tier** | Must Consume Immediately! | 18+ ideas, STRONG theme matching |
+| **A Tier** | Should Consume This Week | 15+ ideas, GOOD theme matching |
 | **B Tier** | Consume When Time Allows | 12+ ideas, DECENT theme matching |
 | **C Tier** | Maybe Skip It | 10+ ideas, SOME theme matching |
 | **D Tier** | Definitely Skip It | Few quality ideas, little relevance |
