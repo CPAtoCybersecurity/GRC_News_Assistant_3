@@ -43,6 +43,8 @@
 
 ### Components
 
+![GRC News Assistant 3.0 Deployment](n8n_Deployment.png)
+
 |Component|Type|Location|Description|
 |---|---|---|---|
 |n8n Server|Workflow Automation|Docker Container (localhost:5678)|Core automation platform running in containerized environment|
@@ -51,8 +53,6 @@
 |Notion API|Database Service|Cloud (External)|Document database for storing processed articles|
 |RSS Feed Sources|Content Sources|External|4 cybersecurity news feeds providing input data|
 |Schedule Trigger|Automation Component|n8n Internal|Daily execution at 5:00 AM|
-
-![GRC News Assistant 3.0 Deployment](n8n_Deployment.png)
 
 ### Data Flow Diagram
 ![GRC News Assistant 3.0 Workflow](workflow.png)
