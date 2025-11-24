@@ -144,7 +144,7 @@ The system automatically applies relevant labels from:
 ## Usage
 
 ### Automatic Processing
-The workflow runs automatically every day at 5 AM, processing articles from the last 3-10 days depending on the source.
+The workflow runs automatically every day at 5 AM, processing articles from the last day depending on the source.
 
 ### Manual Execution
 1. Open n8n workflow
@@ -161,9 +161,9 @@ The workflow runs automatically every day at 5 AM, processing articles from the 
 
 ### Adjusting Date Ranges
 Edit the "Check Publication Date" nodes to modify how far back to look for articles:
-- CISA Advisories: 3 days
-- Simply Cyber: 10 days
-- Other sources: 3 days
+- CISA Advisories: 1 day
+- Simply Cyber: 1 day
+- Other sources: 1 day
 
 ### Customizing AI Prompts
 The `fabric:label_and_rate` node contains the AI prompt that:
