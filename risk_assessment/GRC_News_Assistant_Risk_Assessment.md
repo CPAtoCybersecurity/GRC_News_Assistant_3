@@ -58,15 +58,16 @@ RSS Feeds → Date Filter → Content Extraction → HTTP GET →
 
 ### Assets
 
-|Asset Name|Description|Data Classification|
+|Asset Name|Description|Data Classification*|
 |---|---|---|
 |RSS Feed Content|Public cybersecurity news and advisories|Public|
-|Anthropic API Key|Authentication credential for Claude AI|Sensitive|
-|Notion API Token|Authentication credential for database access|Sensitive|
+|Anthropic API Key|Authentication credential for Claude AI|Confidential|
+|Notion API Token|Authentication credential for database access|Confidential|
 |Processed Articles|Analyzed and rated GRC content with metadata|Internal Use|
-|AI Prompts|Custom prompts for content analysis and labeling|Confidential|
+|AI Prompts|Custom prompts for content analysis and labeling|Public|
 
----
+_*Data Clasification Scale: Public → Internal Use → Confidential → Sensitive_
+
 
 ## 4. GOVERN (GV) - Governance & Risk Strategy
 
@@ -74,14 +75,14 @@ RSS Feeds → Date Filter → Content Extraction → HTTP GET →
 
 |#|Question|Yes (Lower Risk)|No (Higher Risk)|Not Applicable|Comments|
 |---|---|---|---|---|---|
-|**GV.OC-03**|Are legal, regulatory, and contractual requirements identified for this AI/automation use?||X||Need to establish data retention policies for news content and ensure compliance with AI service terms|
+|**GV.OC-03**|Are legal, regulatory, and contractual requirements identified for this AI/automation use?|X|||Copyrighted content|
 
 ### 4.2 Policy (GV.PO)
 
 |#|Question|Yes (Lower Risk)|No (Higher Risk)|Not Applicable|Comments|
 |---|---|---|---|---|---|
-|**GV.PO-01**|Is there a formal Acceptable Use Policy governing n8n workflow creation and AI integration?||X||Policy should be established for workflow development and AI usage|
-|**GV.PO-01**|Does the policy prevent shadow n8n instances across departments?||X||Risk of unauthorized workflow deployments exists|
+|**GV.PO-01**|Is there a formal Acceptable Use Policy governing n8n workflow creation and AI integration?|X||||
+|**GV.PO-01**|Does the policy prevent shadow n8n instances across departments?|X||||
 
 ### 4.4 Supply Chain Risk Management (GV.SC)
 
