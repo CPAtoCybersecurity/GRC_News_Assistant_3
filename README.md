@@ -6,8 +6,6 @@
 
 An intelligent Governance, Risk, and Compliance (GRC) news aggregation system that automatically collects, analyzes, and rates cybersecurity content using AI to help security professionals focus on what matters most.
 
-![GRC News Assistant 3.0 Workflow](risk_assessment/workflow.png)
-
 ## Features
 
 - **Multi-Source RSS Aggregation**: Automated collection from curated GRC news sources
@@ -30,16 +28,7 @@ An intelligent Governance, Risk, and Compliance (GRC) news aggregation system th
 
 ## Architecture
 
-```mermaid
-graph LR
-    A[RSS Feeds] -->|Schedule Trigger| B[n8n Workflow]
-    B --> C[Content Fetcher]
-    C --> D[Markdown Converter]
-    D --> E[AI Text Cleaner]
-    E --> F[AI Rater/Labeler]
-    F --> G[JSON Processor]
-    G --> H[Notion Database]
-```
+![GRC News Assistant 3.0 Workflow](risk_assessment/workflow.png)
 
 ### Data Sources
 
