@@ -77,15 +77,15 @@ The system automatically applies relevant labels from:
    ```
 
 3. **Generate Secure Passwords**
-   ```bash
-   # Generate passwords (run each command, copy the output to .env)
-   echo "POSTGRES_PASSWORD=$(openssl rand -base64 32)"
-   echo "REDIS_PASSWORD=$(openssl rand -base64 32)"
-   echo "N8N_BASIC_AUTH_PASSWORD=$(openssl rand -base64 32)"
 
-   # Encryption key MUST be exactly 32 hex characters
-   echo "N8N_ENCRYPTION_KEY=$(openssl rand -hex 16)"
-   ```
+Copy and run this entire block of commands. The output will be four lines ready to paste directly into your `.env` file:
+
+```bash
+echo "POSTGRES_PASSWORD=$(openssl rand -base64 32)"
+echo "REDIS_PASSWORD=$(openssl rand -base64 32)"
+echo "N8N_BASIC_AUTH_PASSWORD=$(openssl rand -base64 32)"
+echo "N8N_ENCRYPTION_KEY=$(openssl rand -hex 16)"
+```
 
 4. **Edit Your `.env` File**
 
