@@ -58,12 +58,133 @@ The system automatically applies relevant labels from:
 
 ### Prerequisites
 
-- Docker and Docker Compose installed
 - Notion account with API access
 - Anthropic Claude API key
 - Terminal/command line access
 
-### Quick Start (Hardened Deployment)
+### Docker and Docker Compose
+
+#### Linux (Ubuntu/Debian)
+
+```bash
+# Update package index
+sudo apt-get update
+
+# Install prerequisites
+sudo apt-get install -y ca-certificates curl gnupg
+
+# Add Docker's official GPG key
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Add Docker repository
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install Docker Engine and Docker Compose
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Add your user to docker group (avoids needing sudo)
+sudo usermod -aG docker $USER
+
+# Apply group changes (or log out and back in)
+newgrp docker
+
+# Verify installation
+docker --version
+docker compose version
+```
+
+#### Linux (RHEL/CentOS/Fedora)
+
+```bash
+# Install Docker
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Start and enable Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Add your user to docker group
+sudo usermod -aG docker $USER
+newgrp docker
+
+# Verify installation
+docker --version
+docker compose version
+```
+
+#### macOS
+
+1. Download [Docker Desktop for Mac](https://www.docker.com/products/docker-desktop/)
+2. Open the `.dmg` file and drag Docker to Applications
+3. Launch Docker Desktop from Applications
+4. Wait for Docker to start (whale icon in menu bar)
+5. Verify installation:
+   ```bash
+   docker --version
+   docker compose version
+   ```
+
+#### Windows
+
+1. **Enable WSL 2** (if not already enabled):
+   ```powershell
+   # Run PowerShell as Administrator
+   wsl --install
+   ```
+   Restart your computer when prompted.
+
+2. Download [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/)
+
+3. Run the installer and ensure "Use WSL 2 instead of Hyper-V" is selected
+
+4. Launch Docker Desktop and wait for it to start
+
+5. Verify installation (in PowerShell or Command Prompt):
+   ```powershell
+   docker --version
+   docker compose version
+   ```
+
+#### Verify Docker is Working
+
+Run this test on any platform:
+
+```bash
+# Run hello-world container
+docker run hello-world
+
+# Expected output includes:
+# "Hello from Docker!"
+# "This message shows that your installation appears to be working correctly."
+```
+
+#### Post-Installation (Linux Only)
+
+If you get permission errors, ensure Docker is running and your user is in the docker group:
+
+```bash
+# Check Docker service status
+sudo systemctl status docker
+
+# If not running, start it
+sudo systemctl start docker
+
+# Verify group membership
+groups $USER
+
+# If 'docker' not listed, re-add and reboot
+sudo usermod -aG docker $USER
+sudo reboot
+```
+### n8n workflow and Notion
 
 1. **Clone the Repository**
    ```bash
