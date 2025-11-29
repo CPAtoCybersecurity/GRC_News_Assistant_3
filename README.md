@@ -6,6 +6,47 @@
 
 An intelligent Governance, Risk, and Compliance (GRC) news aggregation system that automatically collects, analyzes, and rates cybersecurity content using AI to help security professionals focus on what matters most.
 
+Here's a table of contents you can paste right after your badges and description:
+
+## Table of Contents
+
+- [Features](#features)
+- [Rating System](#rating-system)
+- [Architecture](#architecture)
+  - [Data Sources](#data-sources)
+  - [Docker Image Hardening](#docker-image-hardening)
+  - [Content Labels](#content-labels)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Docker and Docker Compose](#docker-and-docker-compose)
+  - [n8n Workflow and Notion](#n8n-workflow-and-notion)
+- [Usage](#usage)
+  - [Automatic Processing](#automatic-processing)
+  - [Manual Execution](#manual-execution)
+  - [Viewing Results in Notion](#viewing-results-in-notion)
+- [Configuration](#configuration)
+  - [Adjusting Date Ranges](#adjusting-date-ranges)
+  - [Customizing AI Prompts](#customizing-ai-prompts)
+  - [Adding New RSS Sources](#adding-new-rss-sources)
+- [Notion Database Schema](#notion-database-schema)
+- [AI Rating Themes](#ai-rating-themes)
+- [Security Hardening (v3.1)](#security-hardening-v31)
+  - [Container Security](#container-security)
+  - [Network Isolation](#network-isolation)
+  - [AI Security Controls (Prompt Injection Defense)](#ai-security-controls-prompt-injection-defense)
+  - [Standard vs Hardened Comparison](#standard-vs-hardened-comparison)
+- [Security Notes](#security-notes)
+  - [What's Been Redacted](#whats-been-redacted)
+  - [Security Best Practices](#security-best-practices)
+  - [Optional Customizations](#optional-customizations)
+- [Keeping Your Installation Updated](#keeping-your-installation-updated)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
+This covers all your major sections. I collapsed the Docker subsections (Linux, macOS, Windows, etc.) since they're clearly visible under "Docker and Docker Compose" and keeping them would make the TOC very long.
+
 ## Features
 
 - **Multi-Source RSS Aggregation**: Automated collection from curated GRC news sources
