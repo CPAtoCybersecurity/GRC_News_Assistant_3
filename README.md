@@ -116,8 +116,9 @@ N8N_BASIC_AUTH_USER=admin
 
 Save and exit:
 
-- Press `Ctrl + O` to save (confirm with Enter)
 - Press `Ctrl + X` to exit nano
+- `Y` to save
+- Enter
 
 Alternative editors:
 
