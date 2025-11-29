@@ -68,7 +68,7 @@ The system automatically applies relevant labels from:
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/CPAtoCybersecurity/GRC_News_Assistant_3.git
-   cd GRC_News_Assistant_3/n8n/hardened
+   cd GRC_News_Assistant_3/n8n/workflows
    ```
 
 2. **Create Your Environment File**
