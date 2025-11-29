@@ -1,23 +1,10 @@
-# GRC News Assistant 3.1
+# GRC News Assistant 3.0
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![n8n Compatible](https://img.shields.io/badge/n8n-Compatible-orange.svg)](https://n8n.io)
 [![Notion Integration](https://img.shields.io/badge/Notion-Integrated-black.svg)](https://notion.so)
 
 An intelligent Governance, Risk, and Compliance (GRC) news aggregation system that automatically collects, analyzes, and rates cybersecurity content using AI to help security professionals focus on what matters most.
-
-## What's New in Version 3.1
-
-Building on version 3.0's foundation, v3.1 adds **production-grade security hardening**:
-
-| Feature | v3.0 | v3.1 |
-|---------|------|------|
-| Docker deployment | Basic | **Hardened** (non-root, read-only, capability dropping) |
-| Network isolation | Single network | **Dual network** (internal DB isolation) |
-| Prompt injection defense | None | **Guardrails node + hardened prompts** |
-| Output validation | Basic JSON parse | **Schema validation with sanitization** |
-| Secrets management | Inline in compose | **Environment file with validation** |
-| Resource limits | None | **CPU/memory caps** |
 
 ## Features
 
@@ -49,6 +36,17 @@ Building on version 3.0's foundation, v3.1 adds **production-grade security hard
 - **Simply Cyber Newsletter** - GRC-focused content
 - **Unsupervised Learning** - Daniel Miessler's security insights
 - **CISO Series** - Executive-level security podcasts
+
+### Docker Image Hardening
+
+| Feature | Stock Docker Config | Improved Docker Config |
+|---------|------|------|
+| Docker deployment | Basic | **Hardened** (non-root, read-only, capability dropping) |
+| Network isolation | Single network | **Dual network** (internal DB isolation) |
+| Prompt injection defense | None | **Guardrails node + hardened prompts** |
+| Output validation | Basic JSON parse | **Schema validation with sanitization** |
+| Secrets management | Inline in compose | **Environment file with validation** |
+| Resource limits | None | **CPU/memory caps** |
 
 ### Content Labels
 
