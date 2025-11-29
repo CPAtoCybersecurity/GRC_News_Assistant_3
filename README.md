@@ -6,8 +6,6 @@
 
 An intelligent Governance, Risk, and Compliance (GRC) news aggregation system that automatically collects, analyzes, and rates cybersecurity content using AI to help security professionals focus on what matters most.
 
-Here's a table of contents you can paste right after your badges and description:
-
 ## Table of Contents
 
 - [Features](#features)
@@ -43,8 +41,6 @@ Here's a table of contents you can paste right after your badges and description
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
-
-This covers all your major sections. I collapsed the Docker subsections (Linux, macOS, Windows, etc.) since they're clearly visible under "Docker and Docker Compose" and keeping them would make the TOC very long.
 
 ## Features
 
