@@ -36,8 +36,7 @@ Here's a table of contents you can paste right after your badges and description
   - [AI Security Controls (Prompt Injection Defense)](#ai-security-controls-prompt-injection-defense)
   - [Standard vs Hardened Comparison](#standard-vs-hardened-comparison)
 - [Security Notes](#security-notes)
-  - [What's Been Redacted](#whats-been-redacted)
-  - [Security Best Practices](#security-best-practices)
+  - [Best Practices](#security-best-practices)
   - [Optional Customizations](#optional-customizations)
 - [Keeping Your Installation Updated](#keeping-your-installation-updated)
 - [Troubleshooting](#troubleshooting)
@@ -521,14 +520,7 @@ You MUST:
 
 ## Security Notes
 
-### What's Been Redacted
-
-- **Notion Database ID**: `YOUR_NOTION_DATABASE_ID`
-- **Credential IDs**:
-  - `NOTION_CREDENTIAL_ID`
-  - `ANTHROPIC_CREDENTIAL_ID`
-
-### Security Best Practices
+### Best Practices
 
 1. **Never commit credentials** to version control
 2. **Use environment variables** for sensitive data in production
