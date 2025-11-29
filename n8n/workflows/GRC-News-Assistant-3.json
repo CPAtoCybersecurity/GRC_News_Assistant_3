@@ -1,5 +1,5 @@
 {
-  "name": "GRC-News-Assistant-3-with-Guardrails",
+  "name": "GRC-News-Assistant-3",
   "nodes": [
     {
       "parameters": {
@@ -627,7 +627,7 @@
               "role": "assistant"
             },
             {
-              "content": "={{ $json.guardrailsInput }}"
+              "content": "={{ $json.railsInput }}"
             }
           ]
         },
@@ -664,16 +664,16 @@
     {
       "parameters": {
         "text": "={{ $json.data }}",
-        "guardrails": {}
+        "rails": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.guardrails",
+      "type": "@n8n/n8n-nodes-langchain.rails",
       "typeVersion": 1,
       "position": [
         1344,
         256
       ],
-      "id": "guardrails-content-001",
-      "name": "Content Guardrails",
+      "id": "rails-content-001",
+      "name": "Content rails",
       "onError": "continueErrorOutput"
     },
     {
@@ -745,14 +745,14 @@
       "main": [
         [
           {
-            "node": "Content Guardrails",
+            "node": "Content rails",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Content Guardrails": {
+    "Content rails": {
       "main": [
         [
           {
@@ -943,7 +943,7 @@
       "ai_languageModel": [
         [
           {
-            "node": "Content Guardrails",
+            "node": "Content rails",
             "type": "ai_languageModel",
             "index": 0
           }
