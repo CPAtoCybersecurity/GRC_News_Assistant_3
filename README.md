@@ -89,9 +89,41 @@ echo "N8N_ENCRYPTION_KEY=$(openssl rand -hex 16)"
 
 4. **Edit Your `.env` File**
 
-   Replace all `CHANGE_ME` values with your generated secrets.
+Open your `.env` file for editing:
 
-   > ⚠️ **Security Note:** Never commit your `.env` file to git.
+```bash
+   nano .env
+```
+
+Paste the generated values:
+
+- Find the corresponding lines in the file (they'll have placeholder values)
+- Replace the placeholder values with your generated ones
+- Or simply paste all four lines at the appropriate location
+
+Open `.env` in your text editor and replace all `CHANGE_ME` values:
+
+```bash
+# Example .env (use YOUR generated values, not these!)
+POSTGRES_PASSWORD=aB3dE6gH9jK2mN5pQ8sT1vW4yZ7bC0eF
+REDIS_PASSWORD=xY2zA5bC8dE1fG4hI7jK0lM3nO6pQ9rS
+N8N_ENCRYPTION_KEY=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
+N8N_BASIC_AUTH_PASSWORD=uV8wX1yZ4aB7cD0eF3gH6iJ9kL2mN5oP
+N8N_BASIC_AUTH_USER=admin
+```
+
+> ⚠️ **Security Note:** Never commit your `.env` file to git. The `.gitignore` is configured to prevent this, but always double-check.
+
+Save and exit:
+
+- Press `Ctrl + O` to save (confirm with Enter)
+- Press `Ctrl + X` to exit nano
+
+Alternative editors:
+
+- If you prefer `vim`: `vim .env`
+- If you prefer `vi`: `vi .env`
+- Visual Studio Code: `code .env`
 
 5. **Pre-Deployment Security Scan (Recommended)**
    ```bash
