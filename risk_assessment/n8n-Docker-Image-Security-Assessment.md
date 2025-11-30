@@ -1,6 +1,6 @@
 # n8n Docker Image Security Assessment
 
-**Scan Date:** November 2025  
+**Scan Date:** November 30, 2025  
 **Image:** `n8nio/n8n:latest`  
 **Digest:** `873a79619a34`  
 **Platform:** linux/arm64  
