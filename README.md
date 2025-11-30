@@ -632,39 +632,7 @@ This logs you into Docker Hub, which is required for Docker Scout to work. You'l
 
 The GRC News Assistant runs three containers that work together:
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        GRC News Assistant Stack                          │
-│                                                                          │
-│  ┌─────────────────────────────────────────────────────────────────┐    │
-│  │                           n8n                                    │    │
-│  │                    (Workflow Automation)                         │    │
-│  │                                                                  │    │
-│  │  • Runs the GRC news workflow                                    │    │
-│  │  • Fetches RSS feeds from the internet                           │    │
-│  │  • Calls Claude AI for analysis                                  │    │
-│  │  • Sends results to Notion                                       │    │
-│  │  • Web UI on port 5678                                           │    │
-│  └──────────────────┬────────────────────┬──────────────────────────┘    │
-│                     │                    │                               │
-│          stores     │                    │  caches                       │
-│          workflows  │                    │  session data                 │
-│          & creds    │                    │                               │
-│                     ▼                    ▼                               │
-│  ┌──────────────────────────┐  ┌──────────────────────────┐             │
-│  │       PostgreSQL         │  │         Redis            │             │
-│  │        (Database)        │  │        (Cache)           │             │
-│  │                          │  │                          │             │
-│  │  • Stores workflow       │  │  • Speeds up n8n         │             │
-│  │    definitions           │  │  • Stores temporary      │             │
-│  │  • Stores credentials    │  │    execution data        │             │
-│  │    (encrypted)           │  │  • Manages job queues    │             │
-│  │  • Stores execution      │  │                          │             │
-│  │    history               │  │                          │             │
-│  └──────────────────────────┘  └──────────────────────────┘             │
-│                                                                          │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+![Container Architecture](risk_assessment/container-architecture.png)
 
 Each of these containers needs to be scanned for vulnerabilities before deployment.
 
@@ -1013,31 +981,7 @@ Content is evaluated against these key themes:
 
 ### Network Isolation
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        Host Network                          │
-│                             │                                │
-│                        port 5678                             │
-│                             │                                │
-│  ┌──────────────────────────┼────────────────────────────┐  │
-│  │                    n8n-external                        │  │
-│  │                          │                             │  │
-│  │                    ┌─────┴─────┐                       │  │
-│  │                    │    n8n    │ ← Can reach internet  │  │
-│  │                    └─────┬─────┘                       │  │
-│  │                          │                             │  │
-│  │  ┌───────────────────────┼────────────────────────────┐   │  │
-│  │  │         n8n-internal (NO internet access)      │   │  │
-│  │  │                       │                        │   │  │
-│  │  │         ┌─────────────┴─────────────┐          │   │  │
-│  │  │   ┌─────┴─────┐               ┌─────┴─────┐    │   │  │
-│  │  │   │ PostgreSQL│               │   Redis   │    │   │  │
-│  │  │   └───────────┘               └───────────┘    │   │  │
-│  │  │        ↑ Cannot reach internet                 │   │  │
-│  │  └────────────────────────────────────────────────┘   │  │
-│  └───────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
-```
+![Network Isolation Architecture](risk_assessment/network-isolation-architecture.png)
 
 PostgreSQL and Redis are on an internal network with `internal: true` - they cannot make outbound internet connections.
 
