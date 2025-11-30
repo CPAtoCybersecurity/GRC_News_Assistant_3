@@ -63,7 +63,7 @@ Before you begin, make sure you have:
 
 - **Docker and Docker Compose** installed on your system (see [Docker and Docker Compose](#docker-and-docker-compose) for installation instructions)
 - **Notion account** with API access (see [n8n Workflow and Notion](#n8n-workflow-and-notion) for setup details)
-- **Anthropic Claude API key** from [console.anthropic.com](https://console.anthropic.com)
+- **LLM API key** from a supported provider (e.g., [Anthropic](https://console.anthropic.com), [OpenAI](https://platform.openai.com), or similar)
 
 ### Step 1: Download the Project
 
