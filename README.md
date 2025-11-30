@@ -628,6 +628,48 @@ This logs you into Docker Hub, which is required for Docker Scout to work. You'l
 
 #### Scanning Images
 
+##### Understanding the Stack
+
+The GRC News Assistant runs three containers that work together:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        GRC News Assistant Stack                          │
+│                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                           n8n                                    │    │
+│  │                    (Workflow Automation)                         │    │
+│  │                                                                  │    │
+│  │  • Runs the GRC news workflow                                    │    │
+│  │  • Fetches RSS feeds from the internet                           │    │
+│  │  • Calls Claude AI for analysis                                  │    │
+│  │  • Sends results to Notion                                       │    │
+│  │  • Web UI on port 5678                                           │    │
+│  └──────────────────┬────────────────────┬──────────────────────────┘    │
+│                     │                    │                               │
+│          stores     │                    │  caches                       │
+│          workflows  │                    │  session data                 │
+│          & creds    │                    │                               │
+│                     ▼                    ▼                               │
+│  ┌──────────────────────────┐  ┌──────────────────────────┐             │
+│  │       PostgreSQL         │  │         Redis            │             │
+│  │        (Database)        │  │        (Cache)           │             │
+│  │                          │  │                          │             │
+│  │  • Stores workflow       │  │  • Speeds up n8n         │             │
+│  │    definitions           │  │  • Stores temporary      │             │
+│  │  • Stores credentials    │  │    execution data        │             │
+│  │    (encrypted)           │  │  • Manages job queues    │             │
+│  │  • Stores execution      │  │                          │             │
+│  │    history               │  │                          │             │
+│  └──────────────────────────┘  └──────────────────────────┘             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+Each of these containers needs to be scanned for vulnerabilities before deployment.
+
+---
+
 ##### Quick Vulnerability Overview
 
 ```bash
