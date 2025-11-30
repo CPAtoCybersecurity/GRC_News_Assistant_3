@@ -632,9 +632,11 @@ This logs you into Docker Hub, which is required for Docker Scout to work. You'l
 
 ```bash
 docker scout quickview n8nio/n8n:latest
+docker scout quickview postgres:15-alpine
+docker scout quickview redis:7-alpine
 ```
 
-This provides a quick summary of vulnerabilities in the n8n image, showing counts by severity level.
+This provides a quick summary of vulnerabilities in each image you'll be deploying, showing counts by severity level. Always scan all images in your stack, not just the main application.
 
 ---
 
@@ -644,7 +646,7 @@ This provides a quick summary of vulnerabilities in the n8n image, showing count
 docker scout cves n8nio/n8n:latest
 ```
 
-This shows a detailed list of all known CVEs (Common Vulnerabilities and Exposures) in the image, including descriptions and remediation advice.
+This shows a detailed list of all known CVEs (Common Vulnerabilities and Exposures) in the image, including descriptions and remediation advice. Run this for each image if the quickview shows concerning results.
 
 ---
 
