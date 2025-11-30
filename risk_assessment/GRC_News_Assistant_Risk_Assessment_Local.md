@@ -271,7 +271,7 @@ _*Data Classification Scale: Public → Internal Use → Confidential → Sensit
 | #            | Question                                                                     | Yes (Lower Risk) | No (Higher Risk) | Not Applicable | Comments               |
 | ------------ | ---------------------------------------------------------------------------- | ---------------- | ---------------- | -------------- | ---------------------- |
 | **DE.AE-04** | Can malicious workflow patterns be detected?                                 | X                |                  |                | Guardrails node detection |
-| **DE.AE-02** | Are there defined thresholds for abnormal workflow behavior?                 | X                |                  |                | Guardrails thresholds: jailbreak 0.7, injection 0.6, topical 0.5 |
+| **DE.AE-02** | Are there defined thresholds for abnormal workflow behavior?                 | X                |                  |                |  |
 | **DE.AE-02** | Can the system detect prompt injection attempts in logs (if available)?      | X                |                  |                | Guardrails node logs detections |
 | **DE.AE-03** | Are there alerts for workflows accessing systems outside their normal scope? |                  | X                |                |                        |
 
