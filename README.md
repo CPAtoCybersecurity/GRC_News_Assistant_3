@@ -20,6 +20,7 @@ An intelligent Governance, Risk, and Compliance (GRC) news aggregation system th
   - [Docker and Docker Compose](#docker-and-docker-compose)
   - [Pre-Deployment Security Scanning (Recommended)](#pre-deployment-security-scanning-recommended)
   - [n8n Workflow and Notion](#n8n-workflow-and-notion)
+  - [Import and Configure Workflow](#import-and-configure-workflow)
 - [Usage](#usage)
   - [Automatic Processing](#automatic-processing)
   - [Manual Execution](#manual-execution)
@@ -378,53 +379,53 @@ For a comprehensive security assessment of the n8n image, see the [n8n Docker Im
 
 3. **Generate Secure Passwords**
 
-Copy and run this entire block of commands. The output will be four lines ready to paste directly into your `.env` file:
+   Copy and run this entire block of commands. The output will be four lines ready to paste directly into your `.env` file:
 
-```bash
-echo "POSTGRES_PASSWORD=$(openssl rand -base64 32)"
-echo "REDIS_PASSWORD=$(openssl rand -base64 32)"
-echo "N8N_BASIC_AUTH_PASSWORD=$(openssl rand -base64 32)"
-echo "N8N_ENCRYPTION_KEY=$(openssl rand -hex 16)"
-```
+   ```bash
+   echo "POSTGRES_PASSWORD=$(openssl rand -base64 32)"
+   echo "REDIS_PASSWORD=$(openssl rand -base64 32)"
+   echo "N8N_BASIC_AUTH_PASSWORD=$(openssl rand -base64 32)"
+   echo "N8N_ENCRYPTION_KEY=$(openssl rand -hex 16)"
+   ```
 
 4. **Edit Your `.env` File**
 
-Open your `.env` file for editing:
+   Open your `.env` file for editing:
 
-```bash
+   ```bash
    nano .env
-```
+   ```
 
-Paste the generated values:
+   Paste the generated values:
 
-- Find the corresponding lines in the file (they'll have placeholder values)
-- Replace the placeholder values with your generated ones
-- Or simply paste all four lines at the appropriate location
+   - Find the corresponding lines in the file (they'll have placeholder values)
+   - Replace the placeholder values with your generated ones
+   - Or simply paste all four lines at the appropriate location
 
-Open `.env` in your text editor and replace all `CHANGE_ME` values:
+   Open `.env` in your text editor and replace all `CHANGE_ME` values:
 
-```bash
-# Example .env (use YOUR generated values, not these!)
-POSTGRES_PASSWORD=aB3dE6gH9jK2mN5pQ8sT1vW4yZ7bC0eF
-REDIS_PASSWORD=xY2zA5bC8dE1fG4hI7jK0lM3nO6pQ9rS
-N8N_ENCRYPTION_KEY=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
-N8N_BASIC_AUTH_PASSWORD=uV8wX1yZ4aB7cD0eF3gH6iJ9kL2mN5oP
-N8N_BASIC_AUTH_USER=admin
-```
+   ```bash
+   # Example .env (use YOUR generated values, not these!)
+   POSTGRES_PASSWORD=aB3dE6gH9jK2mN5pQ8sT1vW4yZ7bC0eF
+   REDIS_PASSWORD=xY2zA5bC8dE1fG4hI7jK0lM3nO6pQ9rS
+   N8N_ENCRYPTION_KEY=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
+   N8N_BASIC_AUTH_PASSWORD=uV8wX1yZ4aB7cD0eF3gH6iJ9kL2mN5oP
+   N8N_BASIC_AUTH_USER=admin
+   ```
 
-> ⚠️ **Security Note:** Never commit your `.env` file to git. The `.gitignore` is configured to prevent this, but always double-check.
+   > ⚠️ **Security Note:** Never commit your `.env` file to git. The `.gitignore` is configured to prevent this, but always double-check.
 
-Save and exit:
+   Save and exit:
 
-- Press `Ctrl + X` to exit nano
-- `Y` to save
-- Enter
+   - Press `Ctrl + X` to exit nano
+   - `Y` to save
+   - Enter
 
-Alternative editors:
+   Alternative editors:
 
-- If you prefer `vim`: `vim .env`
-- If you prefer `vi`: `vi .env`
-- Visual Studio Code: `code .env`
+   - If you prefer `vim`: `vim .env`
+   - If you prefer `vi`: `vi .env`
+   - Visual Studio Code: `code .env`
 
 5. **Pre-Deployment Security Scan (Recommended)**
    ```bash
@@ -461,7 +462,9 @@ Alternative editors:
    - Copy your database ID from the URL: `notion.so/[workspace]/[database-id]?v=[view-id]`
    - Share the database with your Notion integration
 
-8. **Import and Configure Workflow**
+### Import and Configure Workflow
+
+1. **Prepare the Workflow File**
 
    **IMPORTANT: This public workflow file requires you to replace these placeholders:**
 
@@ -480,13 +483,13 @@ Alternative editors:
    "value": "2ad7a039-2c8d-803f-9216-edaebebf4419",
    ```
 
-9. **Import to n8n**
+2. **Import to n8n**
    - Open n8n interface
    - Go to Workflows → Import from File
    - Select `GRC-News-Assistant-3-with-Guardrails-PUBLIC.json`
    - The workflow will import with broken credential connections (this is normal)
 
-10. **Connect Credentials**
+3. **Connect Credentials**
    - **Notion Integration**:
      1. Go to https://www.notion.so/my-integrations
      2. Create new integration with capabilities: Read, Write, Insert
@@ -503,7 +506,7 @@ Alternative editors:
      4. Add your API key
      5. Save and test
 
-11. **Test the Workflow**
+4. **Test the Workflow**
    - Click "Execute Workflow" to run manually
    - Check your Notion database for new entries
    - Review execution logs for any errors
