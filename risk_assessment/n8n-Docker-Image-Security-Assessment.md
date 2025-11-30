@@ -1,6 +1,6 @@
 # GRC News Assistant 3.0 - Docker Stack Security Assessment
 
-**Scan Date:** November 30, 2025  
+**Scan Date:** November 2025  
 **Scanner:** Docker Scout v1.18.4  
 **Platform:** linux/arm64
 
@@ -12,20 +12,16 @@
 |-------|----------|------|--------|-----|--------|
 | `n8nio/n8n:latest` | 0 | 10 | 12 | 2 | ⚠️ Review required |
 | `postgres:15-alpine` | 0 | 4 | 6 | 2 | ⚠️ Review required |
-| `redis:7-alpine` | **4** | **39** | 29 | 3 | 🛑 **DO NOT DEPLOY** |
+| ~~`redis:7-alpine`~~ | ~~4~~ | ~~39~~ | ~~29~~ | ~~3~~ | 🛑 ~~Do not use~~ |
+| **`redis:alpine`** | **0** | **0** | **0** | **2** | ✅ **Use this** |
 
-**Total Vulnerabilities:** 109 across all images
+**Post-Remediation Total:** 36 vulnerabilities (0 critical, 14 high, 18 medium, 4 low)
 
-### 🛑 CRITICAL FINDING: Redis Image
+### 🛑 MANDATORY ACTION
 
-The `redis:7-alpine` image contains **4 critical** and **39 high** severity vulnerabilities due to an outdated Go stdlib (v1.18.2 from 2022). This image should **not be deployed** without remediation.
+Replace `redis:7-alpine` with `redis:alpine` in your `docker-compose.yml` before deploying. This eliminates **4 critical** and **39 high** severity vulnerabilities.
 
-**Recommended Action:** Replace with a newer Redis image or pin to a patched version:
-```bash
-# Check for a newer tag
-docker scout quickview redis:7.4-alpine
-docker scout quickview redis:alpine
-```
+See [Redis Vulnerabilities](#redis-vulnerabilities-critical-) section for details.
 
 ---
 
@@ -50,32 +46,64 @@ docker scout quickview redis:alpine
 | Packages | 66 |
 | Vulnerabilities | 0C / 4H / 6M / 2L |
 
-### redis:7-alpine
+### redis:alpine ✅ (Remediated)
 
 | Property | Value |
 |----------|-------|
-| Digest | `1f456c9fc77e` |
-| Size | 18 MB |
-| Packages | 26 |
-| Vulnerabilities | **4C / 39H / 29M / 3L** |
+| Digest | `1023a5ac993a` |
+| Size | ~18 MB |
+| Packages | 29 |
+| Vulnerabilities | **0C / 0H / 0M / 2L** |
+
+> ⚠️ **Do not use `redis:7-alpine`** - it contains 4 critical and 39 high severity vulnerabilities.
 
 ---
 
 ## Overall Assessment
 
-The stack has significant security concerns:
+After applying the mandatory Redis remediation:
 
-1. **Redis is the weakest link** - Contains critical vulnerabilities that are actively exploitable
-2. **n8n has unfixable high-severity CVEs** - Require risk acceptance
-3. **Postgres is relatively clean** - All vulnerabilities have fixes available upstream
+1. ✅ **Redis is now clean** - Using `redis:alpine` eliminates all critical/high vulnerabilities
+2. ⚠️ **n8n has unfixable high-severity CVEs** - Require risk acceptance
+3. ⚠️ **Postgres has fixable high CVEs** - Monitor for upstream updates
 
 ---
 
 ## Redis Vulnerabilities (CRITICAL) 🛑
 
-### Critical Severity (4 CVEs)
+### ✅ MANDATORY REMEDIATION
 
-The `redis:7-alpine` image uses Go stdlib 1.18.2 (from 2022), which has **4 critical vulnerabilities**:
+The default `redis:7-alpine` image has critical vulnerabilities. **You must use `redis:alpine` instead.**
+
+| Image | Critical | High | Medium | Low | Status |
+|-------|----------|------|--------|-----|--------|
+| `redis:7-alpine` | 4 | 39 | 29 | 3 | 🛑 Do not use |
+| `redis:7.4-alpine3.21` | 4 | 39 | 29 | 3 | 🛑 Do not use |
+| **`redis:alpine`** | **0** | **0** | **0** | **2** | ✅ **Use this** |
+
+**Required Change in `docker-compose.yml`:**
+
+```yaml
+# ❌ INSECURE - Do not use
+image: redis:7-alpine
+
+# ✅ SECURE - Use this instead
+image: redis:alpine
+```
+
+**Apply the fix:**
+```bash
+# Edit docker-compose.yml to use redis:alpine, then:
+docker compose down
+docker compose pull
+docker compose up -d
+```
+
+---
+
+### Why `redis:7-alpine` Is Vulnerable
+
+The `redis:7-alpine` image uses Go stdlib 1.18.2 (from 2022) in its `gosu` binary, which has **4 critical vulnerabilities**:
 
 | CVE | Type | Fixed In |
 |-----|------|----------|
@@ -84,9 +112,9 @@ The `redis:7-alpine` image uses Go stdlib 1.18.2 (from 2022), which has **4 crit
 | CVE-2023-24538 | Code execution | Go 1.19.8 |
 | CVE-2025-22871 | Network exploitation | Go 1.23.8 |
 
-### High Severity (39 CVEs)
+### High Severity in `redis:7-alpine` (39 CVEs)
 
-Notable high-severity issues include:
+Notable issues that are **eliminated by using `redis:alpine`**:
 
 | CVE | Type | Notes |
 |-----|------|-------|
@@ -94,33 +122,6 @@ Notable high-severity issues include:
 | CVE-2023-39325 | DoS via HTTP/2 | Related to above |
 | CVE-2022-41723 | Panic via HTTP/2 | Resource exhaustion |
 | CVE-2023-29403 | Privilege escalation | Setuid binary exploitation |
-
-### Root Cause
-
-The vulnerabilities stem from an outdated `gosu` binary built with Go 1.18.2. The Redis application itself may be fine, but the image's build toolchain is severely outdated.
-
-### Remediation Options
-
-**Option 1: Use a different Redis tag**
-```bash
-# Check if newer tags are cleaner
-docker scout quickview redis:7.4-alpine3.21
-docker scout quickview redis:alpine
-```
-
-**Option 2: Use Valkey (Redis fork maintained by Linux Foundation)**
-```bash
-docker scout quickview valkey/valkey:8-alpine
-```
-
-**Option 3: Accept risk with network isolation**
-
-Your current `docker-compose.yml` already has mitigations:
-- Redis is on an internal network (`internal: true`)
-- Not exposed to the internet
-- Only n8n can communicate with it
-
-If accepting risk, document it in the Risk Acceptance Statement below.
 
 ---
 
@@ -296,11 +297,11 @@ For production deployment, the following risks are accepted:
 
 | Risk | Severity | Justification | Owner | Review Date |
 |------|----------|---------------|-------|-------------|
-| Redis critical CVEs | **Critical** | Network isolated, not internet-exposed, only n8n can reach it | | |
-| Redis high CVEs (39) | High | Same network isolation as above | | |
+| ~~Redis critical CVEs~~ | ~~Critical~~ | ✅ **REMEDIATED** - Use `redis:alpine` | | |
 | xlsx CVEs (no fix) | High | Excel processing not used / inputs validated | | |
 | expr-eval-fork CVE (no fix) | High | Workflow access restricted to trusted users | | |
 | Postgres high CVEs | High | Network isolated, fixes expected upstream | | |
+| n8n high CVEs (fixable) | High | Fixes pending upstream, monitor for updates | | |
 | Unfixed medium CVEs | Medium | Compensating controls in place | | |
 
 *Fill in Owner and Review Date columns before deployment.*
@@ -318,12 +319,12 @@ Run vulnerability scans:
 # Quick scan all images
 docker scout quickview n8nio/n8n:latest
 docker scout quickview postgres:15-alpine
-docker scout quickview redis:7-alpine
+docker scout quickview redis:alpine
 
 # Full CVE reports (critical and high only)
 docker scout cves n8nio/n8n:latest --only-severity critical,high
 docker scout cves postgres:15-alpine --only-severity critical,high
-docker scout cves redis:7-alpine --only-severity critical,high
+docker scout cves redis:alpine --only-severity critical,high
 ```
 
 ---
