@@ -409,8 +409,6 @@ Risk assessment methodology from: [NIST SP 800-30 Rev. 1: Guide for Conducting R
 
 ## 12. Action Items
 
-### Completed Security Hardening ✅
-
 ### Completed Security Hardening
 | # | Action | Status |
 |---|--------|-----------------|
