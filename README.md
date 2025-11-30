@@ -261,6 +261,12 @@ sudo reboot
 
 Docker Scout scans container images for vulnerabilities before deployment. The free tier includes up to 3 repositories.
 
+**Create a Docker Hub Account (if you don't have one)**
+
+1. Go to [https://hub.docker.com/signup](https://hub.docker.com/signup)
+2. Create a free account with your email address
+3. Verify your email address
+
 #### Docker Desktop (macOS/Windows)
 
 Docker Scout is **pre-installed** with Docker Desktop 4.17+. Just sign in to your Docker account:
@@ -273,11 +279,14 @@ docker login
 ```
 
 #### Linux (All Distros)
+
+**Step 1: Install Docker Scout CLI**
+
 ```bash
 # Create the Docker CLI plugins directory (required on fresh installs)
 mkdir -p ~/.docker/cli-plugins
 
-# Download and run the official install script
+# Download the official install script
 curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh -o install-scout.sh
 
 # Review the script (recommended)
@@ -285,13 +294,21 @@ less install-scout.sh
 
 # Run the installer
 sh install-scout.sh
-
-# Login to Docker Hub (required for Scout)
-docker login
-
-# Verify installation
-docker scout version
 ```
+
+**Step 2: Authenticate with Docker Hub**
+
+```bash
+# Login to Docker Hub (required for Scout)
+docker login -u <your-dockerhub-username>
+```
+
+> **Note:** If you have 2FA enabled on Docker Hub, create a Personal Access Token at [https://hub.docker.com/settings/security](https://hub.docker.com/settings/security) and use it as your password when prompted.
+
+**Step 3: Verify Installation**
+
+```bash
+docker scout version
 
 **Troubleshooting: Installer still fails**
 
@@ -314,7 +331,6 @@ rm scout.tar.gz
 # Verify
 docker scout version
 ```
-
 > **Tip:** Check your architecture with `uname -m`. Output of `x86_64` means AMD64; `aarch64` means ARM64.
 
 #### Verify Docker Scout is Working
