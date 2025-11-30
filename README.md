@@ -643,7 +643,7 @@ Each of these containers needs to be scanned for vulnerabilities before deployme
 ```bash
 docker scout quickview n8nio/n8n:latest
 docker scout quickview postgres:15-alpine
-docker scout quickview redis:7-alpine
+docker scout quickview redis:alpine
 ```
 
 This provides a quick summary of vulnerabilities in each image you'll be deploying, showing counts by severity level. Always scan all images in your stack, not just the main application.
@@ -655,7 +655,7 @@ This provides a quick summary of vulnerabilities in each image you'll be deployi
 ```bash
 docker scout cves n8nio/n8n:latest
 docker scout cves postgres:15-alpine
-docker scout cves redis:7-alpine
+docker scout cves redis:alpine
 ```
 
 This shows a detailed list of all known CVEs (Common Vulnerabilities and Exposures) in each image, including descriptions and remediation advice.
@@ -667,7 +667,7 @@ This shows a detailed list of all known CVEs (Common Vulnerabilities and Exposur
 ```bash
 docker scout cves n8nio/n8n:latest --only-severity critical,high
 docker scout cves postgres:15-alpine --only-severity critical,high
-docker scout cves redis:7-alpine --only-severity critical,high
+docker scout cves redis:alpine --only-severity critical,high
 ```
 
 This filters the CVE report to show only critical and high severity vulnerabilities, helping you focus on the most urgent issues.
@@ -679,7 +679,7 @@ This filters the CVE report to show only critical and high severity vulnerabilit
 ```bash
 docker scout recommendations n8nio/n8n:latest
 docker scout recommendations postgres:15-alpine
-docker scout recommendations redis:7-alpine
+docker scout recommendations redis:alpine
 ```
 
 This shows which package upgrades would fix vulnerabilities in each image, helping you understand what actions to take.
@@ -788,7 +788,7 @@ N8N_BASIC_AUTH_USER=admin
 ```bash
 docker scout quickview n8nio/n8n:latest
 docker scout quickview postgres:15-alpine
-docker scout quickview redis:7-alpine
+docker scout quickview redis:alpine
 ```
 
 These commands scan each Docker image for known vulnerabilities before you deploy them. This is a security best practice that helps you identify and address issues before they reach your environment.
@@ -1064,7 +1064,7 @@ This changes to the directory containing your Docker Compose configuration.
 ```bash
 docker scout quickview n8nio/n8n:latest
 docker scout quickview postgres:15-alpine
-docker scout quickview redis:7-alpine
+docker scout quickview redis:alpine
 ```
 
 Always scan new image versions for vulnerabilities before deploying them. This ensures you're not introducing new security issues with an update.
