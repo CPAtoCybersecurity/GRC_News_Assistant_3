@@ -837,24 +837,9 @@ Access n8n at `http://localhost:5678`
 
 ### Import and Configure Workflow
 
-#### Step 1: Download the Workflow File
+#### Step 1: Locate the Workflow File
 
-If you cloned the repository, the workflow file is already available at `n8n/workflows/GRC-News-Assistant-3.json`.
-
-To download the workflow file directly from a Kali terminal (or any Linux terminal):
-
-```bash
-wget https://raw.githubusercontent.com/CPAtoCybersecurity/GRC_News_Assistant_3/main/n8n/workflows/GRC-News-Assistant-3.json
-```
-
-This downloads the workflow JSON file to your current directory. Alternatively, use `curl`:
-
-```bash
-curl -O https://raw.githubusercontent.com/CPAtoCybersecurity/GRC_News_Assistant_3/main/n8n/workflows/GRC-News-Assistant-3.json
-```
-
-- `wget` downloads files from the web
-- `curl -O` downloads and saves with the original filename
+When you cloned the repository, the workflow file was saved to `n8n/workflows/GRC-News-Assistant-3.json`.
 
 ---
 
