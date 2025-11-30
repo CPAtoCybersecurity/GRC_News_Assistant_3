@@ -839,18 +839,18 @@ Access n8n at `http://localhost:5678`
 
 #### Step 1: Download the Workflow File
 
-If you cloned the repository, the workflow file is already available at `n8n/hardened/GRC-News-Assistant-3.json`.
+If you cloned the repository, the workflow file is already available at `n8n/workflows/GRC-News-Assistant-3.json`.
 
 To download the workflow file directly from a Kali terminal (or any Linux terminal):
 
 ```bash
-wget https://raw.githubusercontent.com/CPAtoCybersecurity/GRC_News_Assistant_3/main/n8n/hardened/GRC-News-Assistant-3.json
+wget https://raw.githubusercontent.com/CPAtoCybersecurity/GRC_News_Assistant_3/main/n8n/workflows/GRC-News-Assistant-3.json
 ```
 
 This downloads the workflow JSON file to your current directory. Alternatively, use `curl`:
 
 ```bash
-curl -O https://raw.githubusercontent.com/CPAtoCybersecurity/GRC_News_Assistant_3/main/n8n/hardened/GRC-News-Assistant-3.json
+curl -O https://raw.githubusercontent.com/CPAtoCybersecurity/GRC_News_Assistant_3/main/n8n/workflows/GRC-News-Assistant-3.json
 ```
 
 - `wget` downloads files from the web
@@ -1093,7 +1093,7 @@ You may also want to customize:
 ##### Navigate to Your Installation
 
 ```bash
-cd GRC_News_Assistant_3/n8n/hardened
+cd GRC_News_Assistant_3/n8n/workflows
 ```
 
 This changes to the directory containing your Docker Compose configuration.
