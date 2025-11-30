@@ -309,7 +309,7 @@ docker login -u <your-dockerhub-username>
 
 ```bash
 docker scout version
-
+```
 **Troubleshooting: Installer still fails**
 
 If the script fails, install manually:
