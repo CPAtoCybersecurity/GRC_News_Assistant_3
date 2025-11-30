@@ -410,23 +410,24 @@ Risk assessment methodology from: [NIST SP 800-30 Rev. 1: Guide for Conducting R
 
 ### Completed Security Hardening ✅
 
-| # | Action | Completion Date | Status |
-|---|--------|-----------------|--------|
-| 1 | Deploy Kali Linux VM in VirtualBox | Completed | ✅ |
-| 2 | Configure VM with NAT networking (not bridged) | Completed | ✅ |
-| 3 | Implement hardened Docker Compose configuration | Completed | ✅ |
-| 4 | Configure non-root container execution | Completed | ✅ |
-| 5 | Implement read-only root filesystem | Completed | ✅ |
-| 6 | Drop all Linux capabilities | Completed | ✅ |
-| 7 | Block privilege escalation | Completed | ✅ |
-| 8 | Configure CPU/memory resource limits | Completed | ✅ |
-| 9 | Implement dual network isolation for databases | Completed | ✅ |
-| 10 | Move secrets to environment file | Completed | ✅ |
-| 11 | Integrate Docker Scout pre-deployment scanning | Completed | ✅ |
-| 12 | Implement Guardrails node for prompt injection detection | Completed | ✅ |
-| 13 | Add hardened system prompts with security notices | Completed | ✅ |
-| 14 | Implement output validation with schema enforcement | Completed | ✅ |
-| 15 | Configure VM snapshots for backup/recovery | Completed | ✅ |
+### Completed Security Hardening
+| # | Action | Status |
+|---|--------|-----------------|
+| 1 | Deploy Kali Linux VM in VirtualBox | Completed |
+| 2 | Configure VM with NAT networking (not bridged) | Completed |
+| 3 | Implement hardened Docker Compose configuration | Completed |
+| 4 | Configure non-root container execution | Completed |
+| 5 | Implement read-only root filesystem | Completed |
+| 6 | Drop all Linux capabilities | Completed |
+| 7 | Block privilege escalation | Completed |
+| 8 | Configure CPU/memory resource limits | Completed |
+| 9 | Implement dual network isolation for databases | Completed |
+| 10 | Move secrets to environment file | Completed |
+| 11 | Integrate Docker Scout pre-deployment scanning | Completed |
+| 12 | Implement Guardrails node for prompt injection detection | Completed |
+| 13 | Add hardened system prompts with security notices | Completed |
+| 14 | Implement output validation with schema enforcement | Completed |
+| 15 | Configure VM snapshots for backup/recovery | Completed |
 
 ### Option A: Additional VM Hardening (Optional, +5% Risk Reduction)
 
@@ -487,18 +488,6 @@ Risk assessment methodology from: [NIST SP 800-30 Rev. 1: Guide for Conducting R
 | `security_opt: no-new-privileges` | Prevent privilege escalation | Stops setuid/sudo attacks |
 | `deploy.resources.limits` | CPU/memory caps | Prevents DoS and cryptomining |
 | `networks: internal: true` | Database network isolation | Prevents DB egress to internet |
-
-### Prompt Injection Defense Layers
-
-| Layer | Component | Threshold/Configuration |
-|-------|-----------|------------------------|
-| 1 | Guardrails Node - Jailbreak Detection | 0.7 |
-| 1 | Guardrails Node - Instruction Injection | 0.6 |
-| 1 | Guardrails Node - Topical Alignment | 0.5 |
-| 2 | Hardened System Prompts | Security notice requiring INPUT treated as data only |
-| 3 | Output Validation | JSON schema enforcement, default values for invalid data |
-
----
 
 ## Appendix B: Change Log
 
