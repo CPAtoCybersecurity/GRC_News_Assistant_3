@@ -686,9 +686,11 @@ This provides a quick summary of vulnerabilities in each image you'll be deployi
 
 ```bash
 docker scout cves n8nio/n8n:latest
+docker scout cves postgres:15-alpine
+docker scout cves redis:7-alpine
 ```
 
-This shows a detailed list of all known CVEs (Common Vulnerabilities and Exposures) in the image, including descriptions and remediation advice. Run this for each image if the quickview shows concerning results.
+This shows a detailed list of all known CVEs (Common Vulnerabilities and Exposures) in each image, including descriptions and remediation advice.
 
 ---
 
@@ -696,6 +698,8 @@ This shows a detailed list of all known CVEs (Common Vulnerabilities and Exposur
 
 ```bash
 docker scout cves n8nio/n8n:latest --only-severity critical,high
+docker scout cves postgres:15-alpine --only-severity critical,high
+docker scout cves redis:7-alpine --only-severity critical,high
 ```
 
 This filters the CVE report to show only critical and high severity vulnerabilities, helping you focus on the most urgent issues.
@@ -706,9 +710,11 @@ This filters the CVE report to show only critical and high severity vulnerabilit
 
 ```bash
 docker scout recommendations n8nio/n8n:latest
+docker scout recommendations postgres:15-alpine
+docker scout recommendations redis:7-alpine
 ```
 
-This shows which package upgrades would fix vulnerabilities, helping you understand what actions to take.
+This shows which package upgrades would fix vulnerabilities in each image, helping you understand what actions to take.
 
 ---
 
