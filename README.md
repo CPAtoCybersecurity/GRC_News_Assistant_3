@@ -257,19 +257,22 @@ groups $USER
 sudo usermod -aG docker $USER
 sudo reboot
 ```
-### Install Docker Scout (Optional - Recommended)
+
+# Install Docker Scout (Optional - Recommended)
 
 Docker Scout scans container images for vulnerabilities before deployment. The free tier includes up to 3 repositories.
 
-**Create a Docker Hub Account (if you don't have one)**
+## Create a Docker Hub Account (if you don't have one)
 
-1. Go to [https://hub.docker.com/signup](https://hub.docker.com/signup)
+1. Go to https://hub.docker.com/signup
 2. Create a free account with your email address
+   - **Tip:** Gmail and Outlook tend to have better email delivery rates than work emails or smaller providers
 3. Verify your email address
 
-#### Docker Desktop (macOS/Windows)
+## Docker Desktop (macOS/Windows)
 
-Docker Scout is **pre-installed** with Docker Desktop 4.17+. Just sign in to your Docker account:
+Docker Scout is pre-installed with Docker Desktop 4.17+. Just sign in to your Docker account:
+
 ```bash
 # Verify Scout is available
 docker scout version
@@ -278,9 +281,9 @@ docker scout version
 docker login
 ```
 
-#### Linux (All Distros)
+## Linux (All Distros)
 
-**Step 1: Install Docker Scout CLI**
+### Step 1: Install Docker Scout CLI
 
 ```bash
 # Create the Docker CLI plugins directory (required on fresh installs)
@@ -296,25 +299,58 @@ less install-scout.sh
 sh install-scout.sh
 ```
 
-**Step 2: Authenticate with Docker Hub**
+### Step 2: Create a Personal Access Token (PAT)
+
+**Important:** Docker Scout requires a Personal Access Token for authentication, even if `docker login` succeeds.
+
+1. Go to https://hub.docker.com/settings/security
+2. Click "New Access Token"
+3. Give it a description (e.g., "Docker Scout CLI")
+4. Set permissions to **Read-only** (sufficient for scanning)
+5. Click "Generate" and copy the token immediately (you won't see it again)
+
+### Step 3: Authenticate with Docker Hub
 
 ```bash
-# Login to Docker Hub (required for Scout)
+# Login using your PAT
 docker login -u <your-dockerhub-username>
+# When prompted for password, paste your PAT (not your account password)
 ```
 
-> **Note:** If you have 2FA enabled on Docker Hub, create a Personal Access Token at [https://hub.docker.com/settings/security](https://hub.docker.com/settings/security) and use it as your password when prompted.
+### Step 4: Configure Scout Authentication
 
-**Step 3: Verify Installation**
+Even after `docker login` succeeds, Scout may not recognize your credentials. Set these environment variables:
+
+```bash
+export DOCKER_SCOUT_HUB_USER=<your-dockerhub-username>
+export DOCKER_SCOUT_HUB_PASSWORD=<your-PAT-token>
+```
+
+To make this permanent, add to your shell profile (`~/.bashrc` or `~/.zshrc`):
+
+```bash
+echo 'export DOCKER_SCOUT_HUB_USER=<your-dockerhub-username>' >> ~/.bashrc
+echo 'export DOCKER_SCOUT_HUB_PASSWORD=<your-PAT-token>' >> ~/.bashrc
+source ~/.bashrc
+```
+
+### Step 5: Verify Installation
 
 ```bash
 docker scout version
+docker scout quickview nginx:latest
 ```
-**Troubleshooting: Installer still fails**
+
+## Troubleshooting
+
+### Installer Fails
 
 If the script fails, install manually:
+
 ```bash
 # Download Scout (choose ONE based on your architecture)
+# Check your architecture with: uname -m
+# x86_64 = AMD64 | aarch64 = ARM64
 
 # For AMD64/Intel/x86_64:
 curl -fsSL https://github.com/docker/scout-cli/releases/latest/download/docker-scout_linux_amd64.tar.gz -o scout.tar.gz
@@ -331,28 +367,65 @@ rm scout.tar.gz
 # Verify
 docker scout version
 ```
-> **Tip:** Check your architecture with `uname -m`. Output of `x86_64` means AMD64; `aarch64` means ARM64.
 
-#### Verify Docker Scout is Working
+### "Log in with your Docker ID" Error (After Successful docker login)
+
+This is a known issue where Scout doesn't recognize credentials from `docker login`. 
+
+**Solution:** Set environment variables explicitly:
+
 ```bash
-# Quick scan of an image
-docker scout quickview nginx:latest
+export DOCKER_SCOUT_HUB_USER=<your-dockerhub-username>
+export DOCKER_SCOUT_HUB_PASSWORD=<your-PAT-token>
 
-# Expected output includes:
-# Image vulnerabilities summary and recommendations
+# Then retry
+docker scout quickview nginx:latest
 ```
 
-#### Alternative: Run Scout as Container (No Installation)
+### Docker Hub Verification Emails Not Arriving
 
-If you prefer not to install the CLI:
+- Check spam/junk folders
+- Try creating a new account with Gmail or Outlook (better delivery rates)
+- Wait 5-10 minutes and request again
+
+### PAT Permission Levels
+
+When creating your Personal Access Token, choose based on your needs:
+
+| Permission | Use Case |
+|------------|----------|
+| **Public repo read-only** | Only scanning public images |
+| **Read-only** | Scanning public + private images (recommended for Scout) |
+| **Read-write** | Pushing images to Docker Hub |
+| **Read-write-delete** | Full repository management |
+
+For Docker Scout vulnerability scanning, **Read-only** is recommended.
+
+## Alternative: Run Scout as Container (No Installation)
+
+If you prefer not to install the CLI or continue having credential issues:
+
 ```bash
 docker run -it \
   -e DOCKER_SCOUT_HUB_USER=<your-dockerhub-username> \
-  -e DOCKER_SCOUT_HUB_PASSWORD=<your-dockerhub-token> \
+  -e DOCKER_SCOUT_HUB_PASSWORD=<your-PAT-token> \
   docker/scout-cli quickview nginx:latest
 ```
 
-> **Note:** Create a Docker Hub access token at https://hub.docker.com/settings/security rather than using your password.
+## Scanning n8n Before Deployment
+
+Once Scout is working:
+
+```bash
+# Quick vulnerability overview
+docker scout quickview n8nio/n8n:latest
+
+# Detailed CVE report
+docker scout cves n8nio/n8n:latest
+
+# Get recommendations
+docker scout recommendations n8nio/n8n:latest
+```
 
 ### n8n workflow and Notion
 
