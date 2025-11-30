@@ -174,7 +174,7 @@ The system automatically applies relevant labels from:
 ### Prerequisites
 
 - Notion account with API access
-- Anthropic Claude API key
+- LLM API key (Anthropic Claude, OpenAI, Google Gemini, or local Ollama)
 - Terminal/command line access
 
 ### Docker and Docker Compose
@@ -837,23 +837,24 @@ Access n8n at `http://localhost:5678`
 
 ### Import and Configure Workflow
 
-#### Step 1: Prepare the Workflow File
+#### Step 1: Download the Workflow File
 
-**IMPORTANT: This public workflow file requires you to replace these placeholders:**
+If you cloned the repository, the workflow file is already available at `n8n/hardened/GRC-News-Assistant-3.json`.
 
-Open `n8n/hardened/GRC-News-Assistant-3.json` in a text editor and replace ALL occurrences of:
-- `YOUR_NOTION_DATABASE_ID` → Your actual Notion database ID (appears 2 times)
-- `NOTION_CREDENTIAL_ID` → Will be replaced when you connect credentials in n8n
-- `ANTHROPIC_CREDENTIAL_ID` → Will be replaced when you connect credentials in n8n
+To download the workflow file directly from a Kali terminal (or any Linux terminal):
 
-Example:
-```json
-// Before:
-"value": "YOUR_NOTION_DATABASE_ID",
-
-// After:
-"value": "2ad7a039-2c8d-803f-9216-edaebebf4419",
+```bash
+wget https://raw.githubusercontent.com/CPAtoCybersecurity/GRC_News_Assistant_3/main/n8n/hardened/GRC-News-Assistant-3.json
 ```
+
+This downloads the workflow JSON file to your current directory. Alternatively, use `curl`:
+
+```bash
+curl -O https://raw.githubusercontent.com/CPAtoCybersecurity/GRC_News_Assistant_3/main/n8n/hardened/GRC-News-Assistant-3.json
+```
+
+- `wget` downloads files from the web
+- `curl -O` downloads and saves with the original filename
 
 ---
 
@@ -866,23 +867,70 @@ Example:
 
 ---
 
-#### Step 3: Connect Credentials
+#### Step 3: Configure Credentials and Database IDs
+
+You have two options for configuring the workflow: edit the JSON file before importing, or configure everything through the n8n web interface after importing.
+
+**Option A: Configure via n8n Web Interface (Recommended)**
+
+This is the easier approach - simply import the workflow and fix the connections visually:
+
+1. After importing, you'll see warning indicators on nodes with missing credentials
+2. Click on each node with a warning to configure it
+3. For **Notion nodes**: Click the credential dropdown → Create New → paste your Integration Token
+4. For **LLM nodes** (labeled "fabric" or similar): Click the credential dropdown → Create New → select your LLM provider and paste your API key
+5. For **Notion database nodes**: Click on the node → find the Database ID field → paste your database ID
+6. Save the workflow when all warnings are resolved
+
+**Option B: Edit JSON File Before Importing**
+
+If you prefer to pre-configure the file, open `GRC-News-Assistant-3.json` in a text editor and replace these placeholders:
+
+- `YOUR_NOTION_DATABASE_ID` → Your actual Notion database ID (appears 2 times)
+- `NOTION_CREDENTIAL_ID` → Leave as-is (will be replaced when you connect credentials in n8n)
+- `ANTHROPIC_CREDENTIAL_ID` → Leave as-is (will be replaced when you connect credentials in n8n)
+
+Example database ID replacement:
+```json
+// Before:
+"value": "YOUR_NOTION_DATABASE_ID",
+
+// After:
+"value": "2ad7a039-2c8d-803f-9216-edaebebf4419",
+```
+
+---
+
+#### Step 4: Set Up Credentials
 
 **Notion Integration:**
 1. Go to https://www.notion.so/my-integrations
 2. Create new integration with capabilities: Read, Write, Insert
 3. Copy the Internal Integration Token
-4. In n8n, click on the "Create a database page" node
+4. In n8n, click on any Notion node (e.g., "Create a database page")
 5. Click "Create New" for credentials
 6. Paste your Integration Token
 7. Save and test connection
 
-**Anthropic API:**
-1. Get API key from https://console.anthropic.com
-2. Click on both "fabric" nodes in the workflow
-3. Create new Anthropic credential
-4. Add your API key
+**LLM API (Anthropic, OpenAI, or other providers):**
+
+The workflow is designed to work with various LLM providers. Choose the one that fits your needs:
+
+| Provider | Get API Key | n8n Credential Type |
+|----------|-------------|---------------------|
+| Anthropic (Claude) | https://console.anthropic.com | Anthropic |
+| OpenAI (GPT) | https://platform.openai.com | OpenAI |
+| Google (Gemini) | https://aistudio.google.com | Google AI |
+| Ollama (Local) | Local installation | Ollama |
+
+To configure:
+1. Get an API key from your chosen provider
+2. Click on the LLM nodes in the workflow (labeled "fabric" or similar)
+3. Click the credential dropdown → Create New
+4. Select your provider and enter your API key
 5. Save and test
+
+> **Note:** If switching LLM providers, you may need to adjust the model name in the node settings to match your provider's available models.
 
 ---
 
@@ -1038,7 +1086,7 @@ You may also want to customize:
 - RSS feed URLs (if you have different sources)
 - Schedule trigger time (currently set to 5 AM)
 - Date range filters (currently 3-10 days depending on source)
-- AI model selection (currently using Claude 3.5 Haiku)
+- LLM provider and model selection (default configuration uses Claude, but supports OpenAI, Google, Ollama, and others)
 
 ## Keeping Your Installation Updated
 
