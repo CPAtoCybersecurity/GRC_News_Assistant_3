@@ -100,9 +100,8 @@ The system automatically applies relevant labels from:
 
 ### Docker and Docker Compose
 
-#### Linux (Ubuntu/Debian)
+#### Linux (Ubuntu)
 
-```bash
 # Update package index
 sudo apt-get update
 
@@ -133,11 +132,44 @@ newgrp docker
 # Verify installation
 docker --version
 docker compose version
-```
+
+#### Linux (Debian/Kali)
+
+# Update package index
+sudo apt-get update
+
+# Install prerequisites
+sudo apt-get install -y ca-certificates curl gnupg
+
+# Add Docker's official GPG key
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Add Docker repository (uses Debian bookworm - compatible with Kali 2023.x+)
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+  bookworm stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install Docker Engine and Docker Compose
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Add your user to docker group (avoids needing sudo)
+sudo usermod -aG docker $USER
+
+# Apply group changes (or log out and back in)
+newgrp docker
+
+# Verify installation
+docker --version
+docker compose version
+
+> **Note:** For older Kali versions (pre-2023), replace `bookworm` with `bullseye` in the repository line.
 
 #### Linux (RHEL/CentOS/Fedora)
 
-```bash
 # Install Docker
 sudo dnf -y install dnf-plugins-core
 sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -154,7 +186,6 @@ newgrp docker
 # Verify installation
 docker --version
 docker compose version
-```
 
 #### macOS
 
