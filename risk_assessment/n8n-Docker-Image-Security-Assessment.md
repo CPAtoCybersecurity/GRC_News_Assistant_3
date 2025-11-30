@@ -1,34 +1,169 @@
-# n8n Docker Image Security Assessment
+# GRC News Assistant 3.0 - Docker Stack Security Assessment
 
 **Scan Date:** November 30, 2025  
-**Image:** `n8nio/n8n:latest`  
-**Digest:** `873a79619a34`  
-**Platform:** linux/arm64  
 **Scanner:** Docker Scout v1.18.4  
-**Base Image:** `n8nio/base:22.21.0`
+**Platform:** linux/arm64
 
 ---
 
 ## Executive Summary
 
-| Severity | Count | Status |
-|----------|-------|--------|
-| **Critical** | 0 | ✅ Clear |
-| **High** | 10 | ⚠️ Review required |
-| **Medium** | 12 | 📋 Monitor |
-| **Low** | 2 | ℹ️ Acceptable |
+| Image | Critical | High | Medium | Low | Status |
+|-------|----------|------|--------|-----|--------|
+| `n8nio/n8n:latest` | 0 | 10 | 12 | 2 | ⚠️ Review required |
+| `postgres:15-alpine` | 0 | 4 | 6 | 2 | ⚠️ Review required |
+| `redis:7-alpine` | **4** | **39** | 29 | 3 | 🛑 **DO NOT DEPLOY** |
 
-**Total Packages Scanned:** 1,789  
-**Vulnerable Packages:** 14  
-**Total Vulnerabilities:** 21
+**Total Vulnerabilities:** 109 across all images
 
-**Overall Assessment:** The n8n image has no critical vulnerabilities but contains 10 high-severity issues requiring review before production deployment. Several high-severity CVEs have no available fix, requiring risk acceptance and compensating controls.
+### 🛑 CRITICAL FINDING: Redis Image
+
+The `redis:7-alpine` image contains **4 critical** and **39 high** severity vulnerabilities due to an outdated Go stdlib (v1.18.2 from 2022). This image should **not be deployed** without remediation.
+
+**Recommended Action:** Replace with a newer Redis image or pin to a patched version:
+```bash
+# Check for a newer tag
+docker scout quickview redis:7.4-alpine
+docker scout quickview redis:alpine
+```
 
 ---
 
-## High Severity Vulnerabilities
+## Image Details
 
-### No Fix Available ⛔
+### n8nio/n8n:latest
+
+| Property | Value |
+|----------|-------|
+| Digest | `873a79619a34` |
+| Base Image | `n8nio/base:22.21.0` |
+| Size | 276 MB |
+| Packages | 1,789 |
+| Vulnerabilities | 0C / 10H / 12M / 2L |
+
+### postgres:15-alpine
+
+| Property | Value |
+|----------|-------|
+| Digest | `1ecbd7256ab9` |
+| Size | 105 MB |
+| Packages | 66 |
+| Vulnerabilities | 0C / 4H / 6M / 2L |
+
+### redis:7-alpine
+
+| Property | Value |
+|----------|-------|
+| Digest | `1f456c9fc77e` |
+| Size | 18 MB |
+| Packages | 26 |
+| Vulnerabilities | **4C / 39H / 29M / 3L** |
+
+---
+
+## Overall Assessment
+
+The stack has significant security concerns:
+
+1. **Redis is the weakest link** - Contains critical vulnerabilities that are actively exploitable
+2. **n8n has unfixable high-severity CVEs** - Require risk acceptance
+3. **Postgres is relatively clean** - All vulnerabilities have fixes available upstream
+
+---
+
+## Redis Vulnerabilities (CRITICAL) 🛑
+
+### Critical Severity (4 CVEs)
+
+The `redis:7-alpine` image uses Go stdlib 1.18.2 (from 2022), which has **4 critical vulnerabilities**:
+
+| CVE | Type | Fixed In |
+|-----|------|----------|
+| CVE-2024-24790 | Network exploitation | Go 1.21.11 |
+| CVE-2023-24540 | Code execution | Go 1.19.9 |
+| CVE-2023-24538 | Code execution | Go 1.19.8 |
+| CVE-2025-22871 | Network exploitation | Go 1.23.8 |
+
+### High Severity (39 CVEs)
+
+Notable high-severity issues include:
+
+| CVE | Type | Notes |
+|-----|------|-------|
+| CVE-2023-44487 | HTTP/2 Rapid Reset | **CISA Known Exploited Vulnerability (KEV)** |
+| CVE-2023-39325 | DoS via HTTP/2 | Related to above |
+| CVE-2022-41723 | Panic via HTTP/2 | Resource exhaustion |
+| CVE-2023-29403 | Privilege escalation | Setuid binary exploitation |
+
+### Root Cause
+
+The vulnerabilities stem from an outdated `gosu` binary built with Go 1.18.2. The Redis application itself may be fine, but the image's build toolchain is severely outdated.
+
+### Remediation Options
+
+**Option 1: Use a different Redis tag**
+```bash
+# Check if newer tags are cleaner
+docker scout quickview redis:7.4-alpine3.21
+docker scout quickview redis:alpine
+```
+
+**Option 2: Use Valkey (Redis fork maintained by Linux Foundation)**
+```bash
+docker scout quickview valkey/valkey:8-alpine
+```
+
+**Option 3: Accept risk with network isolation**
+
+Your current `docker-compose.yml` already has mitigations:
+- Redis is on an internal network (`internal: true`)
+- Not exposed to the internet
+- Only n8n can communicate with it
+
+If accepting risk, document it in the Risk Acceptance Statement below.
+
+---
+
+## PostgreSQL Vulnerabilities
+
+### Summary
+
+| Severity | Count | All Fixable? |
+|----------|-------|--------------|
+| Critical | 0 | N/A |
+| High | 4 | ✅ Yes |
+| Medium | 6 | ✅ Yes (5 of 6) |
+| Low | 2 | ✅ Yes |
+| Unspecified | 1 | ❌ No |
+
+### High Severity (4 CVEs)
+
+All 4 high-severity CVEs are in Go stdlib 1.24.6 (used by entrypoint scripts):
+
+| CVE | Fixed In |
+|-----|----------|
+| CVE-2025-61725 | Go 1.24.8 |
+| CVE-2025-61723 | Go 1.24.8 |
+| CVE-2025-58188 | Go 1.24.8 |
+| CVE-2025-58187 | Go 1.24.9 |
+
+### Risk Assessment
+
+**Lower risk because:**
+- PostgreSQL is on an isolated internal network
+- Cannot make outbound internet connections
+- Only n8n can communicate with it
+- Vulnerabilities are in entrypoint scripts, not the database engine itself
+
+**Recommendation:** Monitor for updated `postgres:15-alpine` image and update when available.
+
+---
+
+## n8n Vulnerabilities
+
+## n8n Vulnerabilities
+
+### High Severity - No Fix Available ⛔
 
 These vulnerabilities cannot be patched by updating dependencies. Require risk acceptance or compensating controls.
 
@@ -161,8 +296,11 @@ For production deployment, the following risks are accepted:
 
 | Risk | Severity | Justification | Owner | Review Date |
 |------|----------|---------------|-------|-------------|
+| Redis critical CVEs | **Critical** | Network isolated, not internet-exposed, only n8n can reach it | | |
+| Redis high CVEs (39) | High | Same network isolation as above | | |
 | xlsx CVEs (no fix) | High | Excel processing not used / inputs validated | | |
 | expr-eval-fork CVE (no fix) | High | Workflow access restricted to trusted users | | |
+| Postgres high CVEs | High | Network isolated, fixes expected upstream | | |
 | Unfixed medium CVEs | Medium | Compensating controls in place | | |
 
 *Fill in Owner and Review Date columns before deployment.*
@@ -173,18 +311,19 @@ For production deployment, the following risks are accepted:
 
 Run vulnerability scans:
 - Before each production deployment
-- After n8n version updates
+- After any image version updates
 - Monthly for long-running deployments
 
 ```bash
-# Quick scan
+# Quick scan all images
 docker scout quickview n8nio/n8n:latest
+docker scout quickview postgres:15-alpine
+docker scout quickview redis:7-alpine
 
-# Full CVE report
-docker scout cves n8nio/n8n:latest
-
-# High severity only
+# Full CVE reports (critical and high only)
 docker scout cves n8nio/n8n:latest --only-severity critical,high
+docker scout cves postgres:15-alpine --only-severity critical,high
+docker scout cves redis:7-alpine --only-severity critical,high
 ```
 
 ---
@@ -203,7 +342,7 @@ docker scout cves n8nio/n8n:latest --only-severity critical,high
 
 | Date | Action | Notes |
 |------|--------|-------|
-| November 2025 | Initial assessment | n8n:latest (digest 873a79619a34) |
+| November 2025 | Initial assessment | Full stack: n8n, postgres, redis |
 
 ---
 
