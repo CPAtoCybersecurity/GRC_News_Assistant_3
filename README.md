@@ -8,6 +8,8 @@ An intelligent Governance, Risk, and Compliance (GRC) news aggregation system th
 
 ## Table of Contents
 
+## Table of Contents
+
 - [Features](#features)
 - [Rating System](#rating-system)
 - [Architecture](#architecture)
@@ -17,6 +19,7 @@ An intelligent Governance, Risk, and Compliance (GRC) news aggregation system th
 - [Installation](#installation)
   - [Prerequisites](#prerequisites)
   - [Docker and Docker Compose](#docker-and-docker-compose)
+  - [Install Docker Scout (Optional - Recommended)](#install-docker-scout-optional---recommended)
   - [n8n Workflow and Notion](#n8n-workflow-and-notion)
 - [Usage](#usage)
   - [Automatic Processing](#automatic-processing)
@@ -34,7 +37,7 @@ An intelligent Governance, Risk, and Compliance (GRC) news aggregation system th
   - [AI Security Controls (Prompt Injection Defense)](#ai-security-controls-prompt-injection-defense)
   - [Standard vs Hardened Comparison](#standard-vs-hardened-comparison)
 - [Security Notes](#security-notes)
-  - [Best Practices](#security-best-practices)
+  - [Best Practices](#best-practices)
   - [Optional Customizations](#optional-customizations)
 - [Keeping Your Installation Updated](#keeping-your-installation-updated)
 - [Troubleshooting](#troubleshooting)
