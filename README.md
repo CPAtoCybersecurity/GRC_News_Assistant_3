@@ -65,6 +65,8 @@ Before you begin, make sure you have:
 - **Notion account** with API access (see [n8n Workflow and Notion](#n8n-workflow-and-notion) for setup details)
 - **LLM API key** from a supported provider (e.g., [Anthropic](https://console.anthropic.com), [OpenAI](https://platform.openai.com), or similar)
 
+---
+
 ### Step 1: Download the Project
 
 ```bash
@@ -72,6 +74,8 @@ git clone https://github.com/CPAtoCybersecurity/GRC_News_Assistant_3.git
 ```
 
 This command downloads the entire project repository from GitHub to your local machine. It creates a new folder called `GRC_News_Assistant_3` containing all the project files.
+
+---
 
 ### Step 2: Navigate to the Workflows Directory
 
@@ -81,6 +85,8 @@ cd GRC_News_Assistant_3/n8n/workflows
 
 This changes your current directory to the workflows folder inside the project. This is where the Docker configuration and environment files are located.
 
+---
+
 ### Step 3: Create Your Environment File
 
 ```bash
@@ -89,9 +95,13 @@ cp .env.example .env
 
 This copies the example environment file to create your own `.env` file. The example file contains placeholder values that you'll need to replace with your actual credentials.
 
+---
+
 ### Step 4: Configure Your Credentials
 
 Open the `.env` file in your preferred text editor and add your API keys and credentials. See the **Installation** section for details on what values are required.
+
+---
 
 ### Step 5: Launch the Application
 
@@ -101,9 +111,13 @@ docker compose up -d
 
 This starts all the required services in the background using Docker. The `-d` flag runs the containers in "detached" mode, meaning they'll continue running even after you close your terminal.
 
+---
+
 ### Step 6: Set Up Your Notion Database
 
 Create and configure your Notion database to store the processed GRC news articles. See the [Notion Database Schema](#notion-database-schema) section for the required properties and structure.
+
+---
 
 ### Step 7: Import the n8n Workflow
 
@@ -161,94 +175,289 @@ The system automatically applies relevant labels from:
 ### Docker and Docker Compose
 
 #### Linux (Ubuntu)
+
+##### Step 1: Update Your System
+
 ```bash
-# Update package index
 sudo apt-get update
+```
 
-# Install prerequisites
+This refreshes your package index so your system knows about the latest available software versions. Always do this before installing new packages.
+
+---
+
+##### Step 2: Install Prerequisites
+
+```bash
 sudo apt-get install -y ca-certificates curl gnupg
+```
 
-# Add Docker's official GPG key
+These tools are needed for the next steps:
+- **ca-certificates**: Enables secure HTTPS connections
+- **curl**: Downloads files from the web
+- **gnupg**: Handles cryptographic signatures to verify package authenticity
+
+The `-y` flag automatically answers "yes" to prompts.
+
+---
+
+##### Step 3: Add Docker's Official GPG Key
+
+```bash
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 sudo chmod a+r /etc/apt/keyrings/docker.gpg
+```
 
-# Add Docker repository
+This downloads Docker's signing key and stores it securely. Your system uses this key to verify that Docker packages are legitimate and haven't been tampered with.
+
+- `install -m 0755 -d` creates the keyrings directory with proper permissions
+- `gpg --dearmor` converts the key to binary format
+- `chmod a+r` makes the key readable by all users
+
+---
+
+##### Step 4: Add the Docker Repository
+
+```bash
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
 
-# Install Docker Engine and Docker Compose
+This tells your system where to find Docker packages. The command automatically detects your Ubuntu version and CPU architecture.
+
+- `dpkg --print-architecture` detects your CPU architecture (amd64, arm64, etc.)
+- `$VERSION_CODENAME` gets your Ubuntu version name (e.g., "jammy" for 22.04)
+- `tee` writes the configuration to a new file in the sources directory
+
+---
+
+##### Step 5: Install Docker
+
+```bash
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
 
-# Add your user to docker group (avoids needing sudo)
+First we refresh the package index again (now including the Docker repository), then install:
+- **docker-ce**: The Docker engine itself
+- **docker-ce-cli**: Command-line tools to interact with Docker
+- **containerd.io**: The container runtime that Docker uses under the hood
+- **docker-buildx-plugin**: Extended build capabilities
+- **docker-compose-plugin**: Lets you define multi-container applications
+
+---
+
+##### Step 6: Run Docker Without `sudo`
+
+```bash
 sudo usermod -aG docker $USER
+```
 
-# Apply group changes (or log out and back in)
+By default, Docker requires root privileges. This command adds your user to the `docker` group, letting you run Docker commands without typing `sudo` every time.
+
+```bash
 newgrp docker
+```
 
-# Verify installation
+This activates the group change immediately. Alternatively, you can log out and back in.
+
+> **Security note**: Users in the `docker` group effectively have root access to the system. Only add trusted users.
+
+---
+
+##### Step 7: Verify Installation
+
+```bash
 docker --version
 docker compose version
 ```
 
+If everything worked, you'll see version numbers for both Docker and Docker Compose. You're ready to start running containers!
+
+---
+
 #### Linux (Debian/Kali)
+
+##### Step 1: Update Your System
+
 ```bash
-# Update package index
 sudo apt-get update
+```
 
-# Install prerequisites
+This refreshes your package index so your system knows about the latest available software versions. Always do this before installing new packages.
+
+---
+
+##### Step 2: Install Prerequisites
+
+```bash
 sudo apt-get install -y ca-certificates curl gnupg
+```
 
-# Add Docker's official GPG key
+These tools are needed for the next steps:
+- **ca-certificates**: Enables secure HTTPS connections
+- **curl**: Downloads files from the web
+- **gnupg**: Handles cryptographic signatures to verify package authenticity
+
+The `-y` flag automatically answers "yes" to prompts.
+
+---
+
+##### Step 3: Add Docker's Official GPG Key
+
+```bash
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 sudo chmod a+r /etc/apt/keyrings/docker.gpg
+```
 
-# Add Docker repository (uses Debian bookworm - compatible with Kali 2023.x+)
+This downloads Docker's signing key and stores it securely. Your system uses this key to verify that Docker packages are legitimate and haven't been tampered with.
+
+- `install -m 0755 -d` creates the keyrings directory with proper permissions
+- `gpg --dearmor` converts the key to binary format
+- `chmod a+r` makes the key readable by all users
+
+---
+
+##### Step 4: Add the Docker Repository
+
+```bash
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
   bookworm stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-# Install Docker Engine and Docker Compose
-sudo apt-get update
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-# Add your user to docker group (avoids needing sudo)
-sudo usermod -aG docker $USER
-
-# Apply group changes (or log out and back in)
-newgrp docker
-
-# Verify installation
-docker --version
-docker compose version
 ```
+
+This tells your system where to find Docker packages. Since Kali is based on Debian, we use Docker's Debian repository with the "bookworm" release (compatible with Kali 2023.x and later).
+
+- `dpkg --print-architecture` automatically detects your CPU architecture (amd64, arm64, etc.)
+- `tee` writes the configuration to a new file in the sources directory
 
 > **Note:** For older Kali versions (pre-2023), replace `bookworm` with `bullseye` in the repository line.
 
-#### Linux (RHEL/CentOS/Fedora)
+---
+
+##### Step 5: Install Docker
+
 ```bash
-# Install Docker
-sudo dnf -y install dnf-plugins-core
-sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
 
-# Start and enable Docker
-sudo systemctl start docker
-sudo systemctl enable docker
+First we refresh the package index again (now including the Docker repository), then install:
+- **docker-ce**: The Docker engine itself
+- **docker-ce-cli**: Command-line tools to interact with Docker
+- **containerd.io**: The container runtime that Docker uses under the hood
+- **docker-buildx-plugin**: Extended build capabilities
+- **docker-compose-plugin**: Lets you define multi-container applications
 
-# Add your user to docker group
+---
+
+##### Step 6: Run Docker Without `sudo`
+
+```bash
 sudo usermod -aG docker $USER
-newgrp docker
+```
 
-# Verify installation
+By default, Docker requires root privileges. This command adds your user to the `docker` group, letting you run Docker commands without typing `sudo` every time.
+
+```bash
+newgrp docker
+```
+
+This activates the group change immediately. Alternatively, you can log out and back in.
+
+> **Security note**: Users in the `docker` group effectively have root access to the system. Only add trusted users.
+
+---
+
+##### Step 7: Verify Installation
+
+```bash
 docker --version
 docker compose version
 ```
+
+If everything worked, you'll see version numbers for both Docker and Docker Compose. You're ready to start running containers!
+
+---
+
+#### Linux (RHEL/CentOS/Fedora)
+
+##### Step 1: Install Docker
+
+```bash
+sudo dnf -y install dnf-plugins-core
+```
+
+This installs additional DNF plugins that provide extra package management features, including the ability to add new repositories.
+
+```bash
+sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+```
+
+This adds Docker's official repository to your system so you can install Docker packages directly from Docker, Inc.
+
+```bash
+sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+This installs:
+- **docker-ce**: The Docker engine itself
+- **docker-ce-cli**: Command-line tools to interact with Docker
+- **containerd.io**: The container runtime that Docker uses under the hood
+- **docker-buildx-plugin**: Extended build capabilities
+- **docker-compose-plugin**: Lets you define multi-container applications
+
+---
+
+##### Step 2: Start Docker
+
+```bash
+sudo systemctl start docker
+```
+
+This starts the Docker service immediately. Docker won't run containers until the service is started.
+
+```bash
+sudo systemctl enable docker
+```
+
+This configures Docker to start automatically when your system boots, so you don't have to manually start it each time.
+
+---
+
+##### Step 3: Run Docker Without `sudo`
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+By default, Docker requires root privileges. This command adds your user to the `docker` group, letting you run Docker commands without typing `sudo` every time.
+
+```bash
+newgrp docker
+```
+
+This activates the group change immediately. Alternatively, you can log out and back in.
+
+> **Security note**: Users in the `docker` group effectively have root access to the system. Only add trusted users.
+
+---
+
+##### Step 4: Verify Installation
+
+```bash
+docker --version
+docker compose version
+```
+
+If everything worked, you'll see version numbers for both Docker and Docker Compose. You're ready to start running containers!
+
+---
 
 #### macOS
 
@@ -256,64 +465,107 @@ docker compose version
 2. Open the `.dmg` file and drag Docker to Applications
 3. Launch Docker Desktop from Applications
 4. Wait for Docker to start (whale icon in menu bar)
-5. Verify installation:
+5. Verify installation by opening Terminal and running:
    ```bash
    docker --version
    docker compose version
    ```
 
+If you see version numbers, Docker is installed correctly!
+
+---
+
 #### Windows
 
-1. **Enable WSL 2** (if not already enabled):
-   ```powershell
-   # Run PowerShell as Administrator
-   wsl --install
-   ```
-   Restart your computer when prompted.
+##### Step 1: Enable WSL 2 (if not already enabled)
 
-2. Download [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/)
+```powershell
+wsl --install
+```
 
-3. Run the installer and ensure "Use WSL 2 instead of Hyper-V" is selected
+Run this in PowerShell as Administrator. WSL 2 (Windows Subsystem for Linux) lets Windows run Linux containers natively with better performance than the older Hyper-V method.
 
-4. Launch Docker Desktop and wait for it to start
+Restart your computer when prompted.
 
-5. Verify installation (in PowerShell or Command Prompt):
-   ```powershell
-   docker --version
-   docker compose version
-   ```
+---
+
+##### Step 2: Install Docker Desktop
+
+1. Download [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/)
+2. Run the installer and ensure **"Use WSL 2 instead of Hyper-V"** is selected
+3. Launch Docker Desktop and wait for it to start
+
+---
+
+##### Step 3: Verify Installation
+
+Open PowerShell or Command Prompt and run:
+
+```powershell
+docker --version
+docker compose version
+```
+
+If you see version numbers, Docker is installed correctly!
+
+---
 
 #### Verify Docker is Working
 
 Run this test on any platform:
 
 ```bash
-# Run hello-world container
 docker run hello-world
-
-# Expected output includes:
-# "Hello from Docker!"
-# "This message shows that your installation appears to be working correctly."
 ```
+
+This downloads and runs a tiny test container. If Docker is working correctly, you'll see a message that includes "Hello from Docker!" and confirms your installation is working.
+
+---
 
 #### Post-Installation (Linux Only)
 
 If you get permission errors, ensure Docker is running and your user is in the docker group:
 
+##### Check Docker Service Status
+
 ```bash
-# Check Docker service status
 sudo systemctl status docker
+```
 
-# If not running, start it
+This shows whether the Docker service is running. Look for "active (running)" in the output.
+
+---
+
+##### Start Docker If Needed
+
+```bash
 sudo systemctl start docker
+```
 
-# Verify group membership
+If Docker wasn't running, this starts it.
+
+---
+
+##### Verify Group Membership
+
+```bash
 groups $USER
+```
 
-# If 'docker' not listed, re-add and reboot
+This lists all groups your user belongs to. Look for `docker` in the output.
+
+---
+
+##### Re-add User to Docker Group If Needed
+
+```bash
 sudo usermod -aG docker $USER
 sudo reboot
 ```
+
+If `docker` wasn't listed in your groups, this adds you to the group and reboots to apply the change.
+
+---
 
 ### Pre-Deployment Security Scanning (Recommended)
 
@@ -330,32 +582,82 @@ Before deploying containers, scan them for known vulnerabilities using Docker Sc
 
 Docker Scout is included with Docker Desktop 4.17+. For Linux, install the CLI:
 
+##### Create CLI Plugins Directory
+
 ```bash
-# Create CLI plugins directory
 mkdir -p ~/.docker/cli-plugins
+```
 
-# Download and install
+This creates a directory where Docker stores its CLI plugins. The `-p` flag creates parent directories if they don't exist and doesn't error if the directory already exists.
+
+---
+
+##### Download and Install Docker Scout
+
+```bash
 curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh
+```
 
-# Authenticate (requires Docker Hub account)
+This downloads and runs the Docker Scout installation script. The script automatically detects your system and installs the appropriate version.
+
+- `-f` fails silently on HTTP errors
+- `-s` runs in silent mode (no progress bar)
+- `-S` shows errors if they occur
+- `-L` follows redirects
+
+---
+
+##### Authenticate with Docker Hub
+
+```bash
 docker login
 ```
 
+This logs you into Docker Hub, which is required for Docker Scout to work. You'll be prompted for your Docker Hub username and password.
+
+---
+
 #### Scanning Images
 
+##### Quick Vulnerability Overview
+
 ```bash
-# Quick vulnerability overview
 docker scout quickview n8nio/n8n:latest
+```
 
-# Detailed CVE report
+This provides a quick summary of vulnerabilities in the n8n image, showing counts by severity level.
+
+---
+
+##### Detailed CVE Report
+
+```bash
 docker scout cves n8nio/n8n:latest
+```
 
-# Filter by severity
+This shows a detailed list of all known CVEs (Common Vulnerabilities and Exposures) in the image, including descriptions and remediation advice.
+
+---
+
+##### Filter by Severity
+
+```bash
 docker scout cves n8nio/n8n:latest --only-severity critical,high
+```
 
-# Get upgrade recommendations
+This filters the CVE report to show only critical and high severity vulnerabilities, helping you focus on the most urgent issues.
+
+---
+
+##### Get Upgrade Recommendations
+
+```bash
 docker scout recommendations n8nio/n8n:latest
 ```
+
+This shows which package upgrades would fix vulnerabilities, helping you understand what actions to take.
+
+---
 
 #### Interpreting Results
 
@@ -370,152 +672,201 @@ For detailed setup instructions, troubleshooting, and alternative scanners (Triv
 
 For a comprehensive security assessment of the n8n image, see the [n8n Docker Image Security Assessment](risk_assessment/n8n-Docker-Image-Security-Assessment.md).
 
+---
+
 ### n8n Workflow and Notion
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/CPAtoCybersecurity/GRC_News_Assistant_3.git
-   cd GRC_News_Assistant_3/n8n/workflows
-   ```
+#### Step 1: Clone the Repository
 
-2. **Create Your Environment File**
-   ```bash
-   cp .env.example .env
-   ```
+```bash
+git clone https://github.com/CPAtoCybersecurity/GRC_News_Assistant_3.git
+```
 
-3. **Generate Secure Passwords**
+This downloads the project from GitHub to your computer, creating a folder called `GRC_News_Assistant_3`.
 
-   Copy and run this entire block of commands. The output will be four lines ready to paste directly into your `.env` file:
+```bash
+cd GRC_News_Assistant_3/n8n/workflows
+```
 
-   ```bash
-   echo "POSTGRES_PASSWORD=$(openssl rand -base64 32)"
-   echo "REDIS_PASSWORD=$(openssl rand -base64 32)"
-   echo "N8N_BASIC_AUTH_PASSWORD=$(openssl rand -base64 32)"
-   echo "N8N_ENCRYPTION_KEY=$(openssl rand -hex 16)"
-   ```
+This navigates into the workflows directory where the Docker configuration files are located.
 
-4. **Edit Your `.env` File**
+---
 
-   Open your `.env` file for editing:
+#### Step 2: Create Your Environment File
 
-   ```bash
-   nano .env
-   ```
+```bash
+cp .env.example .env
+```
 
-   Paste the generated values:
+This copies the example environment file to create your own `.env` file. The `.env` file stores sensitive configuration like passwords and API keys.
 
-   - Find the corresponding lines in the file (they'll have placeholder values)
-   - Replace the placeholder values with your generated ones
-   - Or simply paste all four lines at the appropriate location
+---
 
-   Open `.env` in your text editor and replace all `CHANGE_ME` values:
+#### Step 3: Generate Secure Passwords
 
-   ```bash
-   # Example .env (use YOUR generated values, not these!)
-   POSTGRES_PASSWORD=aB3dE6gH9jK2mN5pQ8sT1vW4yZ7bC0eF
-   REDIS_PASSWORD=xY2zA5bC8dE1fG4hI7jK0lM3nO6pQ9rS
-   N8N_ENCRYPTION_KEY=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
-   N8N_BASIC_AUTH_PASSWORD=uV8wX1yZ4aB7cD0eF3gH6iJ9kL2mN5oP
-   N8N_BASIC_AUTH_USER=admin
-   ```
+Copy and run this entire block of commands:
 
-   > ⚠️ **Security Note:** Never commit your `.env` file to git. The `.gitignore` is configured to prevent this, but always double-check.
+```bash
+echo "POSTGRES_PASSWORD=$(openssl rand -base64 32)"
+echo "REDIS_PASSWORD=$(openssl rand -base64 32)"
+echo "N8N_BASIC_AUTH_PASSWORD=$(openssl rand -base64 32)"
+echo "N8N_ENCRYPTION_KEY=$(openssl rand -hex 16)"
+```
 
-   Save and exit:
+This generates four cryptographically secure random values for your passwords and encryption key. The output will be four lines ready to paste into your `.env` file.
 
-   - Press `Ctrl + X` to exit nano
-   - `Y` to save
-   - Enter
+- `openssl rand -base64 32` generates a 32-byte random value encoded in base64
+- `openssl rand -hex 16` generates a 16-byte random value encoded in hexadecimal
 
-   Alternative editors:
+---
 
-   - If you prefer `vim`: `vim .env`
-   - If you prefer `vi`: `vi .env`
-   - Visual Studio Code: `code .env`
+#### Step 4: Edit Your `.env` File
 
-5. **Pre-Deployment Security Scan (Recommended)**
-   ```bash
-   # Scan images for vulnerabilities before deploying
-   docker scout quickview n8nio/n8n:latest
-   docker scout quickview postgres:15-alpine
-   docker scout quickview redis:7-alpine
-   ```
+```bash
+nano .env
+```
 
-6. **Launch the Hardened Stack**
-   ```bash
-   docker compose up -d
+This opens the `.env` file in the nano text editor. You can also use other editors like `vim`, `vi`, or `code` (VS Code).
 
-   # Verify all containers are healthy
-   docker compose ps
-   ```
+**Inside the file:**
+- Find the lines with placeholder values (like `CHANGE_ME`)
+- Replace them with the generated values from Step 3
+- Example of what your file should look like:
 
-   Access n8n at `http://localhost:5678`
+```bash
+# Example .env (use YOUR generated values, not these!)
+POSTGRES_PASSWORD=aB3dE6gH9jK2mN5pQ8sT1vW4yZ7bC0eF
+REDIS_PASSWORD=xY2zA5bC8dE1fG4hI7jK0lM3nO6pQ9rS
+N8N_ENCRYPTION_KEY=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
+N8N_BASIC_AUTH_PASSWORD=uV8wX1yZ4aB7cD0eF3gH6iJ9kL2mN5oP
+N8N_BASIC_AUTH_USER=admin
+```
 
-7. **Configure Notion Database**
-   - Create a new Notion database
-   - Add these properties (exact names and types required):
-     - `Title` (Title property)
-     - `URL` (URL property)
-     - `Labels` (Multi-select property)
-     - `Rating` (Select property with options: S Tier, A Tier, B Tier, C Tier, D Tier)
-     - `Quality Score` (Number property)
-     - `Summary` (Text property)
-     - `Published Date` (Date property)
-     - `Processed Date` (Date property)
-     - `Source` (Select property with options: CISA Cybersecurity Advisories, Simply Cyber Newsletter, Daniel Miessler, CISO Series)
-     - `Snippet` (Text property)
-     - `Rating Explanation` (Text property)
-   - Copy your database ID from the URL: `notion.so/[workspace]/[database-id]?v=[view-id]`
-   - Share the database with your Notion integration
+**To save and exit nano:**
+- Press `Ctrl + X` to exit
+- Press `Y` to confirm saving
+- Press `Enter` to confirm the filename
+
+> ⚠️ **Security Note:** Never commit your `.env` file to git. The `.gitignore` is configured to prevent this, but always double-check.
+
+**Alternative editors:**
+- `vim .env` - Opens in Vim editor
+- `vi .env` - Opens in Vi editor
+- `code .env` - Opens in Visual Studio Code (if installed)
+
+---
+
+#### Step 5: Pre-Deployment Security Scan (Recommended)
+
+```bash
+docker scout quickview n8nio/n8n:latest
+docker scout quickview postgres:15-alpine
+docker scout quickview redis:7-alpine
+```
+
+These commands scan each Docker image for known vulnerabilities before you deploy them. This is a security best practice that helps you identify and address issues before they reach your environment.
+
+---
+
+#### Step 6: Launch the Hardened Stack
+
+```bash
+docker compose up -d
+```
+
+This starts all the services (n8n, PostgreSQL, Redis) in the background.
+
+- `compose up` creates and starts the containers
+- `-d` runs them in "detached" mode (in the background)
+
+```bash
+docker compose ps
+```
+
+This shows the status of all running containers. All services should show as "healthy" or "running".
+
+Access n8n at `http://localhost:5678`
+
+---
+
+#### Step 7: Configure Notion Database
+
+1. Create a new Notion database
+2. Add these properties (exact names and types required):
+   - `Title` (Title property)
+   - `URL` (URL property)
+   - `Labels` (Multi-select property)
+   - `Rating` (Select property with options: S Tier, A Tier, B Tier, C Tier, D Tier)
+   - `Quality Score` (Number property)
+   - `Summary` (Text property)
+   - `Published Date` (Date property)
+   - `Processed Date` (Date property)
+   - `Source` (Select property with options: CISA Cybersecurity Advisories, Simply Cyber Newsletter, Daniel Miessler, CISO Series)
+   - `Snippet` (Text property)
+   - `Rating Explanation` (Text property)
+3. Copy your database ID from the URL: `notion.so/[workspace]/[database-id]?v=[view-id]`
+4. Share the database with your Notion integration
+
+---
 
 ### Import and Configure Workflow
 
-1. **Prepare the Workflow File**
+#### Step 1: Prepare the Workflow File
 
-   **IMPORTANT: This public workflow file requires you to replace these placeholders:**
+**IMPORTANT: This public workflow file requires you to replace these placeholders:**
 
-   - Open `n8n/hardened/GRC-News-Assistant-3.json` in a text editor
-   - Replace ALL occurrences of:
-     - `YOUR_NOTION_DATABASE_ID` → Your actual Notion database ID (appears 2 times)
-     - `NOTION_CREDENTIAL_ID` → Will be replaced when you connect credentials in n8n
-     - `ANTHROPIC_CREDENTIAL_ID` → Will be replaced when you connect credentials in n8n
+Open `n8n/hardened/GRC-News-Assistant-3.json` in a text editor and replace ALL occurrences of:
+- `YOUR_NOTION_DATABASE_ID` → Your actual Notion database ID (appears 2 times)
+- `NOTION_CREDENTIAL_ID` → Will be replaced when you connect credentials in n8n
+- `ANTHROPIC_CREDENTIAL_ID` → Will be replaced when you connect credentials in n8n
 
-   Example:
-   ```json
-   // Before:
-   "value": "YOUR_NOTION_DATABASE_ID",
+Example:
+```json
+// Before:
+"value": "YOUR_NOTION_DATABASE_ID",
 
-   // After:
-   "value": "2ad7a039-2c8d-803f-9216-edaebebf4419",
-   ```
+// After:
+"value": "2ad7a039-2c8d-803f-9216-edaebebf4419",
+```
 
-2. **Import to n8n**
-   - Open n8n interface
-   - Go to Workflows → Import from File
-   - Select `GRC-News-Assistant-3.json`
-   - The workflow will import with broken credential connections (this is normal)
+---
 
-3. **Connect Credentials**
-   - **Notion Integration**:
-     1. Go to https://www.notion.so/my-integrations
-     2. Create new integration with capabilities: Read, Write, Insert
-     3. Copy the Internal Integration Token
-     4. In n8n, click on "Create a database page" node
-     5. Click "Create New" for credentials
-     6. Paste your Integration Token
-     7. Save and test connection
+#### Step 2: Import to n8n
 
-   - **Anthropic API**:
-     1. Get API key from https://console.anthropic.com
-     2. Click on both "fabric" nodes in the workflow
-     3. Create new Anthropic credential
-     4. Add your API key
-     5. Save and test
+1. Open n8n interface at `http://localhost:5678`
+2. Go to **Workflows → Import from File**
+3. Select `GRC-News-Assistant-3.json`
+4. The workflow will import with broken credential connections (this is normal - you'll fix them next)
 
-4. **Test the Workflow**
-   - Click "Execute Workflow" to run manually
-   - Check your Notion database for new entries
-   - Review execution logs for any errors
+---
+
+#### Step 3: Connect Credentials
+
+**Notion Integration:**
+1. Go to https://www.notion.so/my-integrations
+2. Create new integration with capabilities: Read, Write, Insert
+3. Copy the Internal Integration Token
+4. In n8n, click on the "Create a database page" node
+5. Click "Create New" for credentials
+6. Paste your Integration Token
+7. Save and test connection
+
+**Anthropic API:**
+1. Get API key from https://console.anthropic.com
+2. Click on both "fabric" nodes in the workflow
+3. Create new Anthropic credential
+4. Add your API key
+5. Save and test
+
+---
+
+#### Step 4: Test the Workflow
+
+1. Click **"Execute Workflow"** to run manually
+2. Check your Notion database for new entries
+3. Review execution logs for any errors
+
+---
 
 ## Usage
 
@@ -695,35 +1046,79 @@ You may also want to customize:
 
 ## Keeping Your Installation Updated
 
-```bash
-# Navigate to your installation
-cd GRC_News_Assistant_3/n8n/hardened
+##### Navigate to Your Installation
 
-# Check for vulnerabilities in new images BEFORE deploying
+```bash
+cd GRC_News_Assistant_3/n8n/hardened
+```
+
+This changes to the directory containing your Docker Compose configuration.
+
+---
+
+##### Check for Vulnerabilities Before Updating
+
+```bash
 docker scout quickview n8nio/n8n:latest
 docker scout quickview postgres:15-alpine
 docker scout quickview redis:7-alpine
+```
 
-# If no critical issues, pull and restart
+Always scan new image versions for vulnerabilities before deploying them. This ensures you're not introducing new security issues with an update.
+
+---
+
+##### Pull and Restart (If No Critical Issues)
+
+```bash
 docker compose pull
-docker compose down
-docker compose up -d
+```
 
-# Verify health
+This downloads the latest versions of all images defined in your `docker-compose.yml`.
+
+```bash
+docker compose down
+```
+
+This stops and removes all running containers. Your data is preserved in Docker volumes.
+
+```bash
+docker compose up -d
+```
+
+This starts fresh containers using the newly downloaded images.
+
+---
+
+##### Verify Health
+
+```bash
 docker compose ps
 ```
 
+This confirms all containers started successfully and are healthy.
+
 Your workflows and credentials are persisted in Docker volumes, so updates won't affect your configuration.
+
+---
 
 ## Troubleshooting
 
 ### Common Issues
 
 **Permission Denied Errors (Container)**
+
 ```bash
-# Fix ownership of data directory
 sudo chown -R 1000:1000 ./n8n_data
 ```
+
+This fixes ownership of the data directory. The containers run as user 1000, so the data directory needs to be owned by that user.
+
+- `chown` changes file ownership
+- `-R` applies the change recursively to all files and subdirectories
+- `1000:1000` sets both user and group ID to 1000
+
+---
 
 **No items appearing in Notion**
 - Verify Notion integration has database access
