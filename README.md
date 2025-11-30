@@ -56,17 +56,53 @@ An intelligent Governance, Risk, and Compliance (GRC) news aggregation system th
 - **Pre-Deployment Vulnerability Scanning**: Docker Scout integration identifies CVEs before deployment
 - **Automated Workflow**: Scheduled daily processing at 5 AM
 
-## Quick Start
+## Quick Start Guide
+
+### Step 1: Download the Project
 
 ```bash
 git clone https://github.com/CPAtoCybersecurity/GRC_News_Assistant_3.git
+```
+
+This command downloads the entire project repository from GitHub to your local machine. It creates a new folder called `GRC_News_Assistant_3` containing all the project files.
+
+### Step 2: Navigate to the Workflows Directory
+
+```bash
 cd GRC_News_Assistant_3/n8n/workflows
+```
+
+This changes your current directory to the workflows folder inside the project. This is where the Docker configuration and environment files are located.
+
+### Step 3: Create Your Environment File
+
+```bash
 cp .env.example .env
-# Edit .env with your credentials (see Installation section)
+```
+
+This copies the example environment file to create your own `.env` file. The example file contains placeholder values that you'll need to replace with your actual credentials.
+
+### Step 4: Configure Your Credentials
+
+Open the `.env` file in your preferred text editor and add your API keys and credentials. See the **Installation** section for details on what values are required.
+
+### Step 5: Launch the Application
+
+```bash
 docker compose up -d
 ```
 
-Then configure your [Notion database](#notion-database-schema) and [import the workflow](#import-and-configure-workflow).
+This starts all the required services in the background using Docker. The `-d` flag runs the containers in "detached" mode, meaning they'll continue running even after you close your terminal.
+
+### Step 6: Set Up Your Notion Database
+
+Create and configure your Notion database to store the processed GRC news articles. See the [Notion Database Schema](#notion-database-schema) section for the required properties and structure.
+
+### Step 7: Import the n8n Workflow
+
+Once n8n is running, import the provided workflow file and connect it to your Notion database and other services. See [Import and Configure Workflow](#import-and-configure-workflow) for step-by-step instructions.
+
+**You're all set!** After completing these steps, the GRC News Assistant will automatically fetch, analyze, and organize cybersecurity news into your Notion workspace.
 
 ## Rating System
 
