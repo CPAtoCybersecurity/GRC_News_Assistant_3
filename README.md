@@ -264,7 +264,6 @@ Docker Scout scans container images for vulnerabilities before deployment. The f
 #### Docker Desktop (macOS/Windows)
 
 Docker Scout is **pre-installed** with Docker Desktop 4.17+. Just sign in to your Docker account:
-
 ```bash
 # Verify Scout is available
 docker scout version
@@ -274,8 +273,10 @@ docker login
 ```
 
 #### Linux (All Distros)
-
 ```bash
+# Create the Docker CLI plugins directory (required on fresh installs)
+mkdir -p ~/.docker/cli-plugins
+
 # Download and run the official install script
 curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh -o install-scout.sh
 
@@ -292,8 +293,31 @@ docker login
 docker scout version
 ```
 
-#### Verify Docker Scout is Working
+**Troubleshooting: Installer still fails**
 
+If the script fails, install manually:
+```bash
+# Download Scout (choose ONE based on your architecture)
+
+# For AMD64/Intel/x86_64:
+curl -fsSL https://github.com/docker/scout-cli/releases/latest/download/docker-scout_linux_amd64.tar.gz -o scout.tar.gz
+
+# For ARM64 (Raspberry Pi, Apple Silicon VMs, etc.):
+# curl -fsSL https://github.com/docker/scout-cli/releases/latest/download/docker-scout_linux_arm64.tar.gz -o scout.tar.gz
+
+# Extract and install
+tar -xzf scout.tar.gz
+mv docker-scout ~/.docker/cli-plugins/
+chmod +x ~/.docker/cli-plugins/docker-scout
+rm scout.tar.gz
+
+# Verify
+docker scout version
+```
+
+> **Tip:** Check your architecture with `uname -m`. Output of `x86_64` means AMD64; `aarch64` means ARM64.
+
+#### Verify Docker Scout is Working
 ```bash
 # Quick scan of an image
 docker scout quickview nginx:latest
@@ -305,7 +329,6 @@ docker scout quickview nginx:latest
 #### Alternative: Run Scout as Container (No Installation)
 
 If you prefer not to install the CLI:
-
 ```bash
 docker run -it \
   -e DOCKER_SCOUT_HUB_USER=<your-dockerhub-username> \
@@ -314,7 +337,6 @@ docker run -it \
 ```
 
 > **Note:** Create a Docker Hub access token at https://hub.docker.com/settings/security rather than using your password.
-```
 
 ### n8n workflow and Notion
 
