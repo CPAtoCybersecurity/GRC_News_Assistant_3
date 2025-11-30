@@ -32,7 +32,6 @@ An intelligent Governance, Risk, and Compliance (GRC) news aggregation system th
 - [Notion Database Schema](#notion-database-schema)
 - [AI Rating Themes](#ai-rating-themes)
 - [Security Hardening (v3.1)](#security-hardening-v31)
-  - [Pre-Deployment Security](#pre-deployment-security)
   - [Container Security](#container-security)
   - [Network Isolation](#network-isolation)
   - [AI Security Controls (Prompt Injection Defense)](#ai-security-controls-prompt-injection-defense)
@@ -103,7 +102,13 @@ Open the `.env` file in your preferred text editor and add your API keys and cre
 
 ---
 
-### Step 5: Launch the Application
+### Step 5: Pre-Deployment Security Scan (Optional)
+
+Before launching, consider scanning your images for vulnerabilities. See [Pre-Deployment Security Scanning](#pre-deployment-security-scanning-recommended) for instructions.
+
+---
+
+### Step 6: Launch the Application
 
 ```bash
 docker compose up -d
@@ -113,13 +118,13 @@ This starts all the required services in the background using Docker. The `-d` f
 
 ---
 
-### Step 6: Set Up Your Notion Database
+### Step 7: Set Up Your Notion Database
 
 Create and configure your Notion database to store the processed GRC news articles. See the [Notion Database Schema](#notion-database-schema) section for the required properties and structure.
 
 ---
 
-### Step 7: Import the n8n Workflow
+### Step 8: Import the n8n Workflow
 
 Once n8n is running, import the provided workflow file and connect it to your Notion database and other services. See [Import and Configure Workflow](#import-and-configure-workflow) for step-by-step instructions.
 
@@ -785,13 +790,7 @@ N8N_BASIC_AUTH_USER=admin
 
 #### Step 5: Pre-Deployment Security Scan (Recommended)
 
-```bash
-docker scout quickview n8nio/n8n:latest
-docker scout quickview postgres:15-alpine
-docker scout quickview redis:alpine
-```
-
-These commands scan each Docker image for known vulnerabilities before you deploy them. This is a security best practice that helps you identify and address issues before they reach your environment.
+Before launching, scan your images for vulnerabilities. See [Pre-Deployment Security Scanning](#pre-deployment-security-scanning-recommended) for commands and guidance.
 
 ---
 
@@ -963,12 +962,6 @@ Content is evaluated against these key themes:
 
 ## Security Hardening (v3.1)
 
-### Pre-Deployment Security
-
-| Control | What It Does | Why It Matters |
-|---------|--------------|----------------|
-| Docker Scout scanning | CVE detection before deployment | Identifies known vulnerabilities before they reach production |
-
 ### Container Security
 
 | Control | What It Does | Why It Matters |
@@ -1061,13 +1054,7 @@ This changes to the directory containing your Docker Compose configuration.
 
 ##### Check for Vulnerabilities Before Updating
 
-```bash
-docker scout quickview n8nio/n8n:latest
-docker scout quickview postgres:15-alpine
-docker scout quickview redis:alpine
-```
-
-Always scan new image versions for vulnerabilities before deploying them. This ensures you're not introducing new security issues with an update.
+Before updating, scan new image versions for vulnerabilities. See [Pre-Deployment Security Scanning](#pre-deployment-security-scanning-recommended) for commands and guidance.
 
 ---
 
