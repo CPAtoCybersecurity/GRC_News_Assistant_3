@@ -1,4 +1,3 @@
-
 # Cybersecurity Risk Assessment
 
 ## Contents
@@ -29,26 +28,31 @@
   - [8.2 Incident Analysis (RS.AN)](#82-incident-analysis-rsan)
 - [9. RECOVER (RC) - Recovery & Resilience](#9-recover-rc---recovery--resilience)
   - [9.1 Recovery Planning (RC.RP)](#91-recovery-planning-rcrp)
+- [10. Deployment Model Comparison](#10-deployment-model-comparison)
 - [11. Risk Assessment](#11-risk-assessment)
   - [Threat Scenarios](#threat-scenarios)
   - [Risk Matrix](#risk-matrix)
 - [12. Action Items](#12-action-items)
-  - [Option A: Virtual Machine Migration](#option-a-virtual-machine-migration-65-risk-reduction)
+  - [Completed Security Hardening](#completed-security-hardening)
+  - [Option A: Additional VM Hardening](#option-a-additional-vm-hardening)
   - [Option B: n8n Cloud Migration](#option-b-n8n-cloud-migration-85-risk-reduction)
-  - [Post-Migration Security Hardening](#post-migration-security-hardening)
+  - [Remaining Security Enhancements](#remaining-security-enhancements)
 - [Risk Assessment Approval](#risk-assessment-approval)
+
+---
 
 ### Executive Summary
 
-**Application:** GRC News Assistant 3.0 - n8n Workflow Automation with AI Integration
-**Assessment Date:** November 23, 2025
+**Application:** GRC News Assistant 3.0 - n8n Workflow Automation with AI Integration  
+**Assessment Date:** November 23, 2025  
+**Last Updated:** November 30, 2025  
 **Assessment Type:**
 - [X] Initial
+- [X] Change-Triggered (Security Hardening Implementation)
 - [ ] Periodic
-- [ ] Change-Triggered
 
-**Deployment Model:**
-- [X] Self-hosted
+**Current Deployment Model:**
+- [X] Self-hosted (Hardened Docker in Kali VM)
 - [ ] Cloud
 - [ ] Hybrid
 
@@ -57,11 +61,35 @@
 - [X] **Untrusted input** (webhooks, emails, public APIs): No webhook, email or chat input, but public RSS feeds and blog/news content that could contain malicious payloads
 - [X] **External communication** (HTTP requests, emails): Fetch content from RSS feed URLs, Anthropic API for processing, Notion API for database storage
 
-**Current Residual Risk (Docker on Localhost):** **MODERATE** - Running n8n in Docker provides ~40-50% risk reduction through container isolation. However, supply chain vulnerabilities, compromised dependencies, and potential container escapes still pose risks. The container limits direct file system access but shares the host kernel and network.
+---
 
-**Mitigated Risk (with VM):** **MODERATE** - Moving to a Virtual Machine reduces risk by ~65%, isolating the host file system and limiting persistence.
+### Deployment Options Risk Comparison
 
-**Mitigated Risk (with SaaS):** **LOW** - Using n8n Cloud eliminates localhost exposure entirely, providing professional security controls and isolation.
+| Deployment Model | Risk Reduction | Current Residual Risk | Key Characteristics |
+|-----------------|----------------|----------------------|---------------------|
+| **Stock Docker on Mac** | ~40-50% | **MODERATE** | Basic container isolation, shared host kernel, no pre-deployment scanning |
+| **Hardened Docker in Kali VM** ✓ | ~75-80% | **LOW** | VM isolation + hardened containers + pre-deployment scanning + prompt injection defenses |
+| **n8n Cloud (SaaS)** | ~85% | **LOW** | Professional security controls, managed infrastructure, no localhost exposure |
+
+---
+
+### Current Deployment: Hardened Docker in Kali VM
+
+**Implemented Security Controls:**
+- Pre-deployment vulnerability scanning (Docker Scout)
+- Non-root container execution (`user: "1000:1000"`)
+- Read-only root filesystem (`read_only: true`)
+- All Linux capabilities dropped (`cap_drop: ALL`)
+- Privilege escalation blocked (`no-new-privileges`)
+- Resource limits (CPU/memory caps)
+- Dual network isolation (internal DB network)
+- Secrets management via environment file
+- Prompt injection defenses (3 layers)
+- VM-level isolation from host system
+
+**Current Residual Risk:** **LOW** - The combination of VM isolation, hardened Docker containers, pre-deployment vulnerability scanning, and prompt injection defenses provides defense-in-depth that significantly reduces attack surface and limits blast radius of potential compromises.
+
+---
 
 ### 1. Requestor Information
 
@@ -86,8 +114,11 @@ https://app.excalidraw.com/l/1U6BgkXrdYQ/1NxRV12zBlm
 
 |Component|Type|Location|Description|
 |---|---|---|---|
-|n8n Server|Workflow Automation|Docker Container (localhost:5678)|Core automation platform running in containerized environment|
-|Docker Host|Container Runtime|Local Machine|Docker Desktop/Engine providing container isolation|
+|Kali Linux VM|Virtual Machine|VirtualBox on Host|Isolated environment with NAT networking|
+|n8n Server|Workflow Automation|Hardened Docker Container (localhost:5678)|Core automation platform with security hardening|
+|PostgreSQL|Database|Hardened Docker Container (internal network)|Persistent storage with network isolation|
+|Redis|Cache|Hardened Docker Container (internal network)|Queue management with network isolation|
+|Docker Host|Container Runtime|Kali Linux VM|Docker Engine with hardened compose configuration|
 |Anthropic API|AI Service|Cloud (External)|Claude AI models for content cleaning and analysis|
 |Notion API|Database Service|Cloud (External)|Document database for storing processed articles|
 |RSS Feed Sources|Content Sources|External|4 cybersecurity news feeds providing input data|
@@ -98,8 +129,8 @@ https://app.excalidraw.com/l/1U6BgkXrdYQ/1NxRV12zBlm
 
 ```
 RSS Feeds → Date Filter → Content Extraction → HTTP GET →
-→ HTML to Markdown → AI Text Cleaning → AI Labeling/Rating →
-→ JSON Processing → Notion Database Storage
+→ HTML to Markdown → Guardrails Check → AI Text Cleaning → AI Labeling/Rating →
+→ Output Validation → JSON Processing → Notion Database Storage
 ```
 
 ### Assets
@@ -111,8 +142,10 @@ RSS Feeds → Date Filter → Content Extraction → HTTP GET →
 |Notion API Token|Authentication credential for database access|Confidential|
 |Processed Articles|Analyzed and rated GRC content with metadata|Internal Use|
 |AI Prompts|Custom prompts for content analysis and labeling|Public|
+|Docker Environment File|Contains encrypted credentials and configuration|Confidential|
+|VM Snapshots|Point-in-time recovery images|Internal Use|
 
-_*Data Clasification Scale: Public → Internal Use → Confidential → Sensitive_
+_*Data Classification Scale: Public → Internal Use → Confidential → Sensitive_
 
 
 ## 4. GOVERN (GV) - Governance & Risk Strategy
@@ -136,6 +169,7 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 |---|---|---|---|---|---|
 |**GV.SC-02**|Are all LLM providers (OpenAI, Anthropic, etc.) and integrated tools security-vetted?|X|||Anthropic and Notion are established vendors with security programs|
 |**GV.SC-02**|Is there a review process before installing community nodes?|||X|No community nodes|
+|**GV.SC-03**|Are container images scanned for vulnerabilities before deployment?|X|||Docker Scout integrated into deployment workflow|
 
 ## 5. IDENTIFY (ID) - Asset Management & Risk Assessment
 
@@ -144,14 +178,15 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 | #            | Question                                                                      | Yes (Lower Risk) | No (Higher Risk) | Not Applicable | Comments |
 | ------------ | ----------------------------------------------------------------------------- | ---------------- | ---------------- | -------------- | -------- |
 | **ID.AM-03** | Is there a data flow diagram showing all n8n connections to internal systems? | X                |                  |                |          |
+| **ID.AM-07** | Is there an inventory of container images and their vulnerability status?     | X                |                  |                | Docker Scout scan results documented |
 
 ### 5.2 Risk Assessment (ID.RA)
 
 |#|Question|Yes (Lower Risk)|No (Higher Risk)|Not Applicable|Comments|
 |---|---|---|---|---|---|
-|**ID.RA-01**|Are vulnerability scans performed on the n8n host regularly?||X||Implement monthly vulnerability scanning|
+|**ID.RA-01**|Are vulnerability scans performed on the n8n host regularly?|X|||Docker Scout pre-deployment scanning implemented|
 |**ID.RA-02**|Is there a process for reviewing n8n security advisories?||X||Subscribe to n8n security notifications|
-|**ID.RA-05**|Are workflows tested against adversarial inputs before production?||X||No evidence of prompt injection testing|
+|**ID.RA-05**|Are workflows tested against adversarial inputs before production?|X|||Guardrails node with jailbreak/injection detection|
 |**ID.RA-06**|Are business logic decisions requiring human judgment identified and excluded from full automation?|X|||Workflow only processes and labels content, no critical decisions|
 |**ID.RA-07**|Are workflow changes assessed for security impact?||X||Implement change control process|
 
@@ -161,7 +196,7 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 
 | #            | Question                                                                                                            | Yes (Lower Risk) | No (Higher Risk) | Not Applicable | Comments                                                  |
 | ------------ | ------------------------------------------------------------------------------------------------------------------- | ---------------- | ---------------- | -------------- | --------------------------------------------------------- |
-| **PR.AA-01** | Are administrative credentials stored in a password keeper, secret server or key vault - not hard coded into nodes? | X                |                  |                | Credentials stored in n8n credential manager              |
+| **PR.AA-01** | Are administrative credentials stored in a password keeper, secret server or key vault - not hard coded into nodes? | X                |                  |                | Credentials stored in n8n credential manager + .env file  |
 | **PR.AA-01** | Are n8n API credentials managed in the built-in encrypted credential store?                                         | X                |                  |                | Using encrypted credential store for Anthropic and Notion |
 | **PR.AA-01** | Do credentials (API integrations and service accounts) rotate on a defined schedule?                                |                  | X                |                |                                                           |
 | **PR.AA-01** | Are webhook endpoints protected with authentication tokens?                                                         |                  |                  | X              | No webhooks in this workflow                              |
@@ -178,37 +213,40 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 
 | #            | Question                                                                                    | Yes (Lower Risk) | No (Higher Risk) | Not Applicable | Comments                                                                                                                                                                                    |
 | ------------ | ------------------------------------------------------------------------------------------- | ---------------- | ---------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **PR.DS-01** | Is workflow data encrypted at rest?                                                         | X                |                  |                | FileVault for OS is sufficient for use case.  <br>n8n uses SQLite by default which doesn't have native encryption, but overkill for this use case, as long as n8n credentials are encrypted |
+| **PR.DS-01** | Is workflow data encrypted at rest?                                                         | X                |                  |                | FileVault for OS + PostgreSQL in isolated container                                                                                                                                         |
 | **PR.DS-02** | Are all AI service connections and integrations secured using HTTPS with TLS 1.2 or higher? | X                |                  |                | All external APIs use HTTPS                                                                                                                                                                 |
 | **PR.DS-05** | Are any Data Loss Prevention (DLP) controls in place?                                       |                  | X                |                |                                                                                                                                                                                             |
 | **PR.DS-05** | Is there alerting for unusual workflow patterns or data exfiltration?                       |                  | X                |                |                                                                                                                                                                                             |
-| **PR.DS-05** | Are prompts sanitized before being sent to LLMs?                                            |                  | X                |                | Risk of prompt injection from RSS content                                                                                                                                                   |
+| **PR.DS-05** | Are prompts sanitized before being sent to LLMs?                                            | X                |                  |                | Guardrails node validates input before AI processing                                                                                                                                        |
 | **PR.DS-05** | Is sensitive data masked/redacted/omitted before LLM processing?                            | X                |                  |                | Only public RSS content processed                                                                                                                                                           |
-| **PR.DS-05** | Are there guardrails between user inputs and LLM prompts?                                   |                  | X                |                | RSS content directly inserted into prompts                                                                                                                                                  |
+| **PR.DS-05** | Are there guardrails between user inputs and LLM prompts?                                   | X                |                  |                | 3-layer defense: Guardrails node + hardened prompts + output validation                                                                                                                     |
 | **PR.DS-05** | Is there protection against data poisoning in shared knowledge bases?                       | X                |                  |                | Read-only RSS sources from trusted providers                                                                                                                                                |
-| **PR.DS-11** | Are workflow configurations backed up regularly?                                            |                  | X                |                | Manual, ad hoc backups                                                                                                                                                                      |
+| **PR.DS-11** | Are workflow configurations backed up regularly?                                            | X                |                  |                | VM snapshots + GitHub backup                                                                                                                                                                |
 | **PR.DS-11** | Are backups encrypted and stored securely?                                                  | X                |                  |                |                                                                                                                                                                                             |
 
 ### 6.3 Platform Security (PR.PS)
 
 | #            | Question                                                           | Yes (Lower Risk) | No (Higher Risk) | Not Applicable | Comments                                 |
 | ------------ | ------------------------------------------------------------------ | ---------------- | ---------------- | -------------- | ---------------------------------------- |
-| **PR.PS-03** | Has n8n been moved from test to a hardened production environment? |                  | X                |                | Currently running on localhost in Docker |
+| **PR.PS-03** | Has n8n been moved from test to a hardened production environment? | X                |                  |                | Hardened Docker in Kali VM              |
 | **PR.PS-02** | Is the n8n application kept up to date with security patches?      |                  | X                |                | Establish patch management process       |
-| **PR.PS-01** | Is the host system hardened (e.g to CIS benchmarks)?               |                  | X                |                | Move to a production environment         |
-| **PR.PS-05** | Are execution permissions restricted for workflows?                |                  |                  | X              |                                          |
+| **PR.PS-01** | Is the host system hardened (e.g to CIS benchmarks)?               | X                |                  |                | Kali VM with hardened Docker containers  |
+| **PR.PS-05** | Are execution permissions restricted for workflows?                | X                |                  |                | Non-root execution, capability dropping  |
 | **PR.PS-06** | Is code review performed for custom n8n nodes?                     |                  | X                |                | Team of 1                                |
 | **PR.PS-05** | Is there rate limiting on LLM API calls per workflow?              |                  | X                |                | Risk of excessive API usage              |
-| **PR.PS-01** | Can workflows be quickly disabled/rolled back if compromised?      | X                |                  |                |                                          |
+| **PR.PS-01** | Can workflows be quickly disabled/rolled back if compromised?      | X                |                  |                | VM snapshots + workflow disable feature  |
+| **PR.PS-01** | Are containers running with security hardening?                    | X                |                  |                | Non-root, read-only FS, no capabilities  |
+| **PR.PS-01** | Are container resource limits configured?                          | X                |                  |                | CPU/memory caps prevent DoS/cryptomining |
 
 ### 6.4 Infrastructure Resilience (PR.IR)
 
 | #            | Question                                                                                             | Yes (Lower Risk) | No (Higher Risk) | Not Applicable | Comments                                        |
 | ------------ | ---------------------------------------------------------------------------------------------------- | ---------------- | ---------------- | -------------- | ----------------------------------------------- |
-| **PR.IR-01** | Is n8n only accessible from the corporate network (not internet-facing, and no external web search)? |                  |                  | X              |                                                 |
+| **PR.IR-01** | Is n8n only accessible from the corporate network (not internet-facing, and no external web search)? | X                |                  |                | Runs inside VM with NAT networking              |
 | **PR.IR-01** | If internet-accessible, is it protected by VPN or zero-trust access?                                 |                  |                  | X              | Not internet-facing, but pulls public RSS feeds |
-| **PR.IR-01** | Are IP whitelisting/access control lists configured?                                                 |                  |                  | X              | Local access only                               |
+| **PR.IR-01** | Are IP whitelisting/access control lists configured?                                                 |                  |                  | X              | Local access only within VM                     |
 | **PR.IR-01** | Is the n8n interface behind a Web Application Firewall (WAF)?                                        |                  |                  | X              |                                                 |
+| **PR.IR-01** | Is database traffic isolated from external networks?                                                 | X                |                  |                | PostgreSQL/Redis on internal-only network       |
 
 ## 7. DETECT (DE) - Monitoring & Detection
 
@@ -220,19 +258,20 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 | **DE.CM-01** | Are security events from n8n forwarded to centralized SIEM?                            |                  | X                |                |                     |
 | **DE.CM-03** | Is workflow execution activity monitored for anomalies?                                |                  | X                |                |                     |
 | **DE.CM-03** | Are failed authentication attempts monitored?                                          |                  | X                |                |                     |
-| **DE.CM-09** | Is resource usage (CPU/memory) monitored for crypto-mining?                            |                  | X                |                |                     |
+| **DE.CM-09** | Is resource usage (CPU/memory) monitored for crypto-mining?                            | X                |                  |                | Container resource limits prevent abuse |
 | **DE.CM-03** | Can LLM prompts/responses be logged without violating privacy regulations?             | X                |                  |                | Public content only |
 | **DE.CM-01** | Are there alerts for unusual LLM API usage patterns?                                   |                  | X                |                |                     |
 | **DE.CM-03** | Is there monitoring for workflows triggering other workflows excessively?              |                  |                  | X              |                     |
 | **DE.CM-09** | Are workflow execution errors and failures monitored and analyzed for security issues? |                  | X                |                |                     |
+| **DE.CM-03** | Are prompt injection attempts logged and alerted?                                      | X                |                  |                | Guardrails node logs blocked attempts   |
 
 ### 7.2 Adverse Event Analysis (DE.AE)
 
 | #            | Question                                                                     | Yes (Lower Risk) | No (Higher Risk) | Not Applicable | Comments               |
 | ------------ | ---------------------------------------------------------------------------- | ---------------- | ---------------- | -------------- | ---------------------- |
-| **DE.AE-04** | Can malicious workflow patterns be detected?                                 |                  | X                |                | No behavioral analysis |
-| **DE.AE-02** | Are there defined thresholds for abnormal workflow behavior?                 |                  | X                |                |                        |
-| **DE.AE-02** | Can the system detect prompt injection attempts in logs (if available)?      |                  | X                |                |                        |
+| **DE.AE-04** | Can malicious workflow patterns be detected?                                 | X                |                  |                | Guardrails node detection |
+| **DE.AE-02** | Are there defined thresholds for abnormal workflow behavior?                 | X                |                  |                | Guardrails thresholds: jailbreak 0.7, injection 0.6, topical 0.5 |
+| **DE.AE-02** | Can the system detect prompt injection attempts in logs (if available)?      | X                |                  |                | Guardrails node logs detections |
 | **DE.AE-03** | Are there alerts for workflows accessing systems outside their normal scope? |                  | X                |                |                        |
 
 ## 8. RESPOND (RS) - Incident Response
@@ -242,16 +281,16 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 | #            | Question                                                               | Yes (Lower Risk) | No (Higher Risk) | Not Applicable | Comments                              |
 | ------------ | ---------------------------------------------------------------------- | ---------------- | ---------------- | -------------- | ------------------------------------- |
 | **RS.MA-01** | Is there an incident response plan for compromised workflows?          |                  | X                |                |                                       |
-| **RS.MA-03** | Can suspicious workflows be quickly identified and isolated?           | X                |                  |                | n8n provides workflow disable feature |
-| **RS.MA-01** | Can you trace prompt injection attacks through the workflow history?   |                  | X                |                | Limited audit trail                   |
+| **RS.MA-03** | Can suspicious workflows be quickly identified and isolated?           | X                |                  |                | n8n workflow disable + VM isolation   |
+| **RS.MA-01** | Can you trace prompt injection attacks through the workflow history?   | X                |                  |                | Guardrails logs + n8n execution history |
 | **RS.MA-02** | Is there a process to identify and notify affected downstream systems? | X                |                  |                | Only Notion database affected         |
 
 ### 8.2 Incident Analysis (RS.AN)
 
-| #            | Question                                                                  | Yes (Lower Risk) | No (Higher Risk) | Not Applicable   | Comments |
-| ------------ | ------------------------------------------------------------------------- | ---------------- | ---------------- | ----- | -------- |
-| **RS.AN-08** | Are webhook URLs and API endpoints validated?                             |X             |             |  |Using trusted RSS feeds only          |
-| **RS.AN-03** | Is there capability to analyze workflow execution history for root cause? |X             |             |  |n8n provides execution history          |
+| #            | Question                                                                  | Yes (Lower Risk) | No (Higher Risk) | Not Applicable | Comments |
+| ------------ | ------------------------------------------------------------------------- | ---------------- | ---------------- | -------------- | -------- |
+| **RS.AN-08** | Are webhook URLs and API endpoints validated?                             | X                |                  |                | Using trusted RSS feeds only |
+| **RS.AN-03** | Is there capability to analyze workflow execution history for root cause? | X                |                  |                | n8n provides execution history |
 
 ## 9. RECOVER (RC) - Recovery & Resilience
 
@@ -259,8 +298,39 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 
 | #            | Question                                                                     | Yes (Lower Risk) | No (Higher Risk) | Not Applicable | Comments                              |
 | ------------ | ---------------------------------------------------------------------------- | ---------------- | ---------------- | -------------- | ------------------------------------- |
-| **RC.RP-01** | Are workflow backups maintained with version control?                        | X                |                  |                | GitHub                                |
+| **RC.RP-01** | Are workflow backups maintained with version control?                        | X                |                  |                | GitHub + VM snapshots                 |
 | **RC.RP-02** | Can compromised workflows be isolated without affecting critical operations? | X                |                  |                | Non-critical news processing workflow |
+| **RC.RP-03** | Can the environment be restored to a known-good state quickly?               | X                |                  |                | VM snapshots enable rapid rollback    |
+
+---
+
+## 10. Deployment Model Comparison
+
+### Security Control Comparison
+
+| Security Control | Stock Docker on Mac | Hardened Docker in Kali VM | n8n Cloud (SaaS) |
+|-----------------|---------------------|---------------------------|------------------|
+| **Pre-deployment vulnerability scanning** | ❌ None | ✅ Docker Scout | ✅ Managed by vendor |
+| **Container isolation** | ⚠️ Basic | ✅ Non-root, read-only, no capabilities | ✅ Managed |
+| **Host isolation** | ❌ Shared with host OS | ✅ VM provides kernel separation | ✅ Complete isolation |
+| **Network isolation** | ❌ Single network | ✅ Dual network (internal DB) | ✅ Managed |
+| **Prompt injection defense** | ❌ None | ✅ 3 layers (guardrails, prompts, validation) | ⚠️ Depends on workflow |
+| **Secrets management** | ⚠️ Often inline | ✅ Environment file with validation | ✅ Managed vault |
+| **Resource limits** | ❌ None | ✅ CPU/memory caps | ✅ Platform limits |
+| **Privilege escalation prevention** | ❌ Possible | ✅ Blocked (no-new-privileges) | ✅ Managed |
+| **Container escape risk** | ⚠️ Direct host access | ✅ VM boundary limits impact | ✅ Not applicable |
+| **Backup/recovery** | ⚠️ Manual | ✅ VM snapshots + GitHub | ✅ Automated |
+| **Patch management** | ⚠️ Manual | ⚠️ Manual (but scanned) | ✅ Vendor managed |
+| **Compliance controls** | ❌ None | ⚠️ Self-managed | ✅ SOC 2, etc. |
+
+### Risk Reduction Summary
+
+| Deployment Model | Risk Reduction from Baseline | Residual Risk Level |
+|-----------------|-----------------------------|--------------------|
+| No containerization (bare metal) | 0% (baseline) | **HIGH** |
+| Stock Docker on Mac | ~40-50% | **MODERATE** |
+| **Hardened Docker in Kali VM** ✓ | **~75-80%** | **LOW** |
+| n8n Cloud (SaaS) | ~85% | **LOW** |
 
 ---
 
@@ -268,21 +338,56 @@ _*Data Clasification Scale: Public → Internal Use → Confidential → Sensiti
 
 ### Threat Scenarios
 _(Risk Level = Likelihood x Impact)_
-| Threat # | Threat Scenario                                                                                                                                   | Impact (lower for VM and SaaS due to containment) | Likelihood               | Residual Risk (Docker, Localhost) | Residual Risk (VM) | Residual Risk (SaaS) |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------ | --------------------------------- | ------------------ | -------------------- |
-| T001     | **Supply Chain Attack via Malicious Package** - Compromised npm package or typosquatting attack installs backdoor, potentially escaping container | **High**                                          | **Moderate to Very Low** | **Moderate**                      | **Low**            | **Very Low**         |
-| T002     | **Remote Code Execution via Dependencies** - Known CVEs in npm packages (vm2, lodash, axios) allow code execution within container                | **High to Low**                                   | **Moderate to Very Low** | **Moderate**                      | **Low**            | **Very Low**         |
-| T003     | **Container Escape to Host System** - Exploiting Docker vulnerabilities or misconfigurations to access host filesystem and credentials            | **High to N/A**                                   | **Low**                  | **Low**                           | **N/A**            | **N/A**              |
 
-![LLM03](LLM03.png)
-https://app.excalidraw.com/l/1U6BgkXrdYQ/1NxRV12zBlm
+| Threat # | Threat Scenario | Impact | Likelihood | Stock Docker (Mac) | Hardened Docker (VM) | SaaS |
+|----------|-----------------|--------|------------|-------------------|---------------------|------|
+| T001 | **Supply Chain Attack via Malicious Package** - Compromised npm package or typosquatting attack installs backdoor | High → Low | Moderate → Very Low | **MODERATE** | **LOW** | **VERY LOW** |
+| T002 | **Remote Code Execution via Dependencies** - Known CVEs in npm packages allow code execution | High → Low | Moderate → Very Low | **MODERATE** | **VERY LOW** | **VERY LOW** |
+| T003 | **Container Escape to Host System** - Exploiting Docker vulnerabilities to access host | High → N/A | Low | **LOW** | **VERY LOW** | **N/A** |
+| T004 | **Prompt Injection Attack** - Malicious RSS content manipulates AI | High → Very Low | Low | **LOW** | **VERY LOW** | **VERY LOW** |
+| T005 | **Cryptomining via Compromised Container** - Resource abuse for cryptocurrency mining | Moderate | Moderate → Very Low | **MODERATE** | **VERY LOW** | **VERY LOW** |
 
-| Threat # | Threat Scenario                                                                                                                                   | Impact (lower for VM and SaaS due to containment) | Likelihood               | Residual Risk (Docker, Localhost) | Residual Risk (VM) | Residual Risk (SaaS) |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------ | --------------------------------- | ------------------ | -------------------- |
-| T004     | **Prompt Injection Attack** - Malicious RSS content manipulates AI to execute unintended actions or leak API credentials                          | **High to Very Low**                              | **Low**                  | **Low**                           | **Low**            | **Very Low**         |
+### Threat Mitigation Details by Deployment Model
 
-![LLM01-LLM02](LLM01-LLM02.png)
-https://app.excalidraw.com/l/1U6BgkXrdYQ/1NxRV12zBlm
+#### T001: Supply Chain Attack
+
+| Deployment | Mitigation | Residual Risk |
+|------------|-----------|---------------|
+| Stock Docker (Mac) | Basic container isolation only | MODERATE |
+| Hardened Docker (VM) | Docker Scout scanning + VM isolation + read-only containers | LOW |
+| SaaS | Vendor-managed scanning and isolation | VERY LOW |
+
+#### T002: Remote Code Execution via Dependencies
+
+| Deployment | Mitigation | Residual Risk |
+|------------|-----------|---------------|
+| Stock Docker (Mac) | Container limits blast radius | MODERATE |
+| Hardened Docker (VM) | Pre-deployment CVE scanning identifies issues before deployment + VM limits impact | VERY LOW |
+| SaaS | Vendor manages patching and updates | VERY LOW |
+
+#### T003: Container Escape
+
+| Deployment | Mitigation | Residual Risk |
+|------------|-----------|---------------|
+| Stock Docker (Mac) | Shared kernel; escape reaches host directly | LOW |
+| Hardened Docker (VM) | Capability dropping + no-new-privileges + VM boundary | VERY LOW |
+| SaaS | Not applicable; managed infrastructure | N/A |
+
+#### T004: Prompt Injection Attack
+
+| Deployment | Mitigation | Residual Risk |
+|------------|-----------|---------------|
+| Stock Docker (Mac) | No defenses | LOW |
+| Hardened Docker (VM) | Guardrails node (jailbreak 0.7, injection 0.6) + hardened prompts + output validation | VERY LOW |
+| SaaS | Depends on workflow configuration | VERY LOW (if hardened prompts used) |
+
+#### T005: Cryptomining
+
+| Deployment | Mitigation | Residual Risk |
+|------------|-----------|---------------|
+| Stock Docker (Mac) | No resource limits | MODERATE |
+| Hardened Docker (VM) | CPU/memory caps prevent resource abuse | VERY LOW |
+| SaaS | Platform resource controls | VERY LOW |
 
 ### Risk Matrix
 
@@ -298,40 +403,66 @@ https://app.excalidraw.com/l/1U6BgkXrdYQ/1NxRV12zBlm
 *Threat event occurs and results in adverse impact
 
 Risk assessment methodology from: [NIST SP 800-30 Rev. 1: Guide for Conducting Risk Assessments](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-30r1.pdf)
+
+---
+
 ## 12. Action Items
 
-### Option A: Virtual Machine Migration (65% Risk Reduction)
+### Completed Security Hardening ✅
 
-| #   | Action                                         | Due Date | Owner |
-| --- | ---------------------------------------------- | -------- | ----- |
-| A1  | Deploy Kali Linux or Ubuntu VM in VirtualBox   | Day 2    |       |
-| A2  | Configure VM with NAT networking (not bridged) | Day 2    |       |
-| A3  | Disable clipboard sharing and shared folders   | Day 2    |       |
-| A4  | Create separate API keys for VM environment    | Day 3    |       |
-| A5  | Implement VM snapshots before each run         | Day 3    |       |
-| A6  | Set up isolated network segment for VM         | Week 1   |       |
+| # | Action | Completion Date | Status |
+|---|--------|-----------------|--------|
+| 1 | Deploy Kali Linux VM in VirtualBox | Completed | ✅ |
+| 2 | Configure VM with NAT networking (not bridged) | Completed | ✅ |
+| 3 | Implement hardened Docker Compose configuration | Completed | ✅ |
+| 4 | Configure non-root container execution | Completed | ✅ |
+| 5 | Implement read-only root filesystem | Completed | ✅ |
+| 6 | Drop all Linux capabilities | Completed | ✅ |
+| 7 | Block privilege escalation | Completed | ✅ |
+| 8 | Configure CPU/memory resource limits | Completed | ✅ |
+| 9 | Implement dual network isolation for databases | Completed | ✅ |
+| 10 | Move secrets to environment file | Completed | ✅ |
+| 11 | Integrate Docker Scout pre-deployment scanning | Completed | ✅ |
+| 12 | Implement Guardrails node for prompt injection detection | Completed | ✅ |
+| 13 | Add hardened system prompts with security notices | Completed | ✅ |
+| 14 | Implement output validation with schema enforcement | Completed | ✅ |
+| 15 | Configure VM snapshots for backup/recovery | Completed | ✅ |
 
-### Option B: n8n Cloud Migration (85% Risk Reduction)
+### Option A: Additional VM Hardening (Optional, +5% Risk Reduction)
 
-| #   | Action                                        | Due Date | Owner |
-| --- | --------------------------------------------- | -------- | ----- |
-| B1  | Purchase n8n Cloud subscription               | Day 2    |       |
-| B2  | Export all workflows from localhost           | Day 2    |       |
-| B3  | Configure cloud instance with IP restrictions | Day 3    |       |
-| B4  | Enable audit logging and monitoring           | Day 3    |       |
-| B5  | Implement webhook authentication              | Day 4    |       |
-| B6  | Set up automated backups                      | Week 1   |       |
+| # | Action | Due Date | Owner | Priority |
+|---|--------|----------|-------|----------|
+| A1 | Disable clipboard sharing between host and VM | Week 1 | | Low |
+| A2 | Disable shared folders between host and VM | Week 1 | | Low |
+| A3 | Configure VM firewall (iptables/nftables) | Week 2 | | Low |
+| A4 | Implement automated VM snapshot schedule | Week 2 | | Medium |
+| A5 | Document VM rebuild procedure | Week 3 | | Low |
 
-### Post-Migration Security Hardening
+### Option B: n8n Cloud Migration (Alternative, 85% Risk Reduction)
 
-| #   | Action                                     | Due Date | Owner |
-| --- | ------------------------------------------ | -------- | ----- |
-| 4   | Implement input sanitization for RSS feeds | Week 2   |       |
-| 5   | Enable API rate limiting and cost alerts   | Week 2   |       |
-| 6   | Deploy monitoring for unusual activity     | Week 3   |       |
-| 7   | Create incident response playbook          | Week 3   |       |
-| 8   | Establish monthly dependency updates       | Month 1  |       |
-| 9   | Document acceptable use policy             | Month 1  |       |
+| # | Action | Due Date | Owner | Priority |
+|---|--------|----------|-------|----------|
+| B1 | Evaluate n8n Cloud pricing and features | Week 1 | | Medium |
+| B2 | Export all workflows from current deployment | Week 1 | | High |
+| B3 | Configure cloud instance with IP restrictions | Week 2 | | High |
+| B4 | Enable audit logging and monitoring | Week 2 | | High |
+| B5 | Migrate prompt injection defenses to cloud | Week 2 | | High |
+| B6 | Decommission local VM instance | Week 3 | | Medium |
+
+### Remaining Security Enhancements
+
+| # | Action | Due Date | Owner | Priority |
+|---|--------|----------|-------|----------|
+| 1 | Subscribe to n8n security advisories | Week 1 | | High |
+| 2 | Implement credential rotation schedule | Week 2 | | Medium |
+| 3 | Enable API rate limiting and cost alerts | Week 2 | | Medium |
+| 4 | Create incident response playbook | Week 3 | | Medium |
+| 5 | Establish monthly dependency update process | Month 1 | | Medium |
+| 6 | Implement SIEM log forwarding | Month 1 | | Low |
+| 7 | Configure MFA for n8n admin access | Month 1 | | Medium |
+| 8 | Document change control process for workflows | Month 1 | | Low |
+
+---
 
 ## Risk Assessment Approval
 
@@ -341,3 +472,37 @@ Risk assessment methodology from: [NIST SP 800-30 Rev. 1: Guide for Conducting R
 |Application Owner||_________________||
 |Business Sponsor||_________________||
 |CISO/Security Lead||_________________||
+
+---
+
+## Appendix A: Security Control Reference
+
+### Container Security Hardening Details
+
+| Control | Configuration | Security Benefit |
+|---------|--------------|------------------|
+| `user: "1000:1000"` | Non-root user | Limits damage if container compromised |
+| `read_only: true` | Immutable root filesystem | Prevents modification of binaries |
+| `cap_drop: ALL` | Remove all Linux capabilities | Blocks kernel-level exploits |
+| `security_opt: no-new-privileges` | Prevent privilege escalation | Stops setuid/sudo attacks |
+| `deploy.resources.limits` | CPU/memory caps | Prevents DoS and cryptomining |
+| `networks: internal: true` | Database network isolation | Prevents DB egress to internet |
+
+### Prompt Injection Defense Layers
+
+| Layer | Component | Threshold/Configuration |
+|-------|-----------|------------------------|
+| 1 | Guardrails Node - Jailbreak Detection | 0.7 |
+| 1 | Guardrails Node - Instruction Injection | 0.6 |
+| 1 | Guardrails Node - Topical Alignment | 0.5 |
+| 2 | Hardened System Prompts | Security notice requiring INPUT treated as data only |
+| 3 | Output Validation | JSON schema enforcement, default values for invalid data |
+
+---
+
+## Appendix B: Change Log
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 1.0 | 2025-11-23 | Steve | Initial assessment (Docker on localhost) |
+| 2.0 | 2025-11-30 | Steve | Updated for hardened Docker deployment in Kali VM; added deployment model comparisons; updated risk levels; marked completed security hardening actions |
