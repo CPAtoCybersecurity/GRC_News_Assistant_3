@@ -48,7 +48,10 @@ services:
   # Redis Cache (for scaling/queue management)
   #=============================================================================
   redis:
-    image: redis:7-alpine
+    # SECURITY: Use redis:alpine, NOT redis:7-alpine
+    # redis:7-alpine has 4 critical + 39 high CVEs due to outdated Go stdlib
+    # See: risk_assessment/n8n-Docker-Image-Security-Assessment.md
+    image: redis:alpine
     restart: unless-stopped
     user: "999:999"  # redis user
     command: >
