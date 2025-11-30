@@ -257,7 +257,6 @@ groups $USER
 sudo usermod -aG docker $USER
 sudo reboot
 ```
-
 # Install Docker Scout (Optional - Recommended)
 
 Docker Scout scans container images for vulnerabilities before deployment. The free tier includes up to 3 repositories.
@@ -326,13 +325,25 @@ export DOCKER_SCOUT_HUB_USER=<your-dockerhub-username>
 export DOCKER_SCOUT_HUB_PASSWORD=<your-PAT-token>
 ```
 
-To make this permanent, add to your shell profile (`~/.bashrc` or `~/.zshrc`):
+To make this permanent, add to your shell profile:
 
+**Kali Linux / Zsh users:**
+```zsh
+echo 'export DOCKER_SCOUT_HUB_USER=<your-dockerhub-username>' >> ~/.zshrc
+echo 'export DOCKER_SCOUT_HUB_PASSWORD=<your-PAT-token>' >> ~/.zshrc
+source ~/.zshrc
+```
+
+**Ubuntu / Bash users:**
 ```bash
 echo 'export DOCKER_SCOUT_HUB_USER=<your-dockerhub-username>' >> ~/.bashrc
 echo 'export DOCKER_SCOUT_HUB_PASSWORD=<your-PAT-token>' >> ~/.bashrc
 source ~/.bashrc
 ```
+
+**Security Warning:** Never share or commit your PAT token. If you accidentally expose it (e.g., in a screenshot, chat, or git commit), revoke it immediately at https://hub.docker.com/settings/security and create a new one.
+
+**Tip:** Check which shell you're using with `echo $SHELL`. Kali Linux defaults to zsh; most other distros default to bash.
 
 ### Step 5: Verify Installation
 
