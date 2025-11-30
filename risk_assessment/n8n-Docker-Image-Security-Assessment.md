@@ -19,7 +19,7 @@
 
 ### 🛑 MANDATORY ACTION
 
-Replace `redis:7-alpine` with `redis:alpine` in your `docker-compose.yml` before deploying. This eliminates **4 critical** and **39 high** severity vulnerabilities.
+Replaced `redis:7-alpine` with `redis:alpine` in `docker-compose.yml`. This eliminated **4 critical** and **39 high** severity vulnerabilities.
 
 See [Redis Vulnerabilities](#redis-vulnerabilities-critical-) section for details.
 
