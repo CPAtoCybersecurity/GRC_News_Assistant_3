@@ -468,7 +468,7 @@ For a comprehensive security assessment of the n8n image, see the [n8n Docker Im
 
    **IMPORTANT: This public workflow file requires you to replace these placeholders:**
 
-   - Open `n8n/hardened/GRC-News-Assistant-3-with-Guardrails-PUBLIC.json` in a text editor
+   - Open `n8n/hardened/GRC-News-Assistant-3.json` in a text editor
    - Replace ALL occurrences of:
      - `YOUR_NOTION_DATABASE_ID` → Your actual Notion database ID (appears 2 times)
      - `NOTION_CREDENTIAL_ID` → Will be replaced when you connect credentials in n8n
@@ -486,7 +486,7 @@ For a comprehensive security assessment of the n8n image, see the [n8n Docker Im
 2. **Import to n8n**
    - Open n8n interface
    - Go to Workflows → Import from File
-   - Select `GRC-News-Assistant-3-with-Guardrails-PUBLIC.json`
+   - Select `GRC-News-Assistant-3.json`
    - The workflow will import with broken credential connections (this is normal)
 
 3. **Connect Credentials**
