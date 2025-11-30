@@ -174,6 +174,15 @@ The system automatically applies relevant labels from:
 
 ### Docker and Docker Compose
 
+**Jump to your operating system:**
+- [Linux (Ubuntu)](#linux-ubuntu)
+- [Linux (Debian/Kali)](#linux-debiankali)
+- [Linux (RHEL/CentOS/Fedora)](#linux-rhelcentosfedora)
+- [macOS](#macos)
+- [Windows](#windows)
+
+---
+
 #### Linux (Ubuntu)
 
 ##### Step 1: Update Your System
