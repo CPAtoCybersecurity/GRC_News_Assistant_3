@@ -101,7 +101,7 @@ The system automatically applies relevant labels from:
 ### Docker and Docker Compose
 
 #### Linux (Ubuntu)
-
+```bash
 # Update package index
 sudo apt-get update
 
@@ -132,9 +132,10 @@ newgrp docker
 # Verify installation
 docker --version
 docker compose version
+```
 
 #### Linux (Debian/Kali)
-
+```bash
 # Update package index
 sudo apt-get update
 
@@ -165,11 +166,12 @@ newgrp docker
 # Verify installation
 docker --version
 docker compose version
+```
 
 > **Note:** For older Kali versions (pre-2023), replace `bookworm` with `bullseye` in the repository line.
 
 #### Linux (RHEL/CentOS/Fedora)
-
+```bash
 # Install Docker
 sudo dnf -y install dnf-plugins-core
 sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -186,6 +188,7 @@ newgrp docker
 # Verify installation
 docker --version
 docker compose version
+```
 
 #### macOS
 
