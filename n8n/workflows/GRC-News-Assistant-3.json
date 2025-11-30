@@ -17,7 +17,7 @@
         -224,
         256
       ],
-      "id": "schedule-trigger-001",
+      "id": "98692870-9132-4ac2-9ec9-82ec429e8be2",
       "name": "Schedule Trigger"
     },
     {
@@ -28,7 +28,7 @@
           "value": "YOUR_NOTION_DATABASE_ID",
           "mode": "list",
           "cachedResultName": "GRC News Assistant Database",
-          "cachedResultUrl": "https://www.notion.so/YOUR_DATABASE_URL"
+          "cachedResultUrl": "https://www.notion.so/YOUR_NOTION_DATABASE_ID"
         },
         "propertiesUi": {
           "propertyValues": [
@@ -82,12 +82,12 @@
         2624,
         256
       ],
-      "id": "notion-create-page-001",
+      "id": "42621d34-4e8a-4f17-be3f-8429909b1fb8",
       "name": "Create a database page",
       "retryOnFail": true,
       "credentials": {
         "notionApi": {
-          "id": "YOUR_NOTION_CREDENTIAL_ID",
+          "id": "NOTION_CREDENTIAL_ID",
           "name": "Notion account"
         }
       },
@@ -104,7 +104,7 @@
         896,
         256
       ],
-      "id": "http-get-content-001",
+      "id": "b84ad43e-296f-401f-a5da-4f5260e84343",
       "name": "getContent"
     },
     {
@@ -118,7 +118,7 @@
         1120,
         256
       ],
-      "id": "markdown-convert-001",
+      "id": "aedf303a-cef3-4632-95ba-d3f4bf207fe5",
       "name": "Markdown"
     },
     {
@@ -132,7 +132,7 @@
         0,
         544
       ],
-      "id": "rss-ciso-series-001",
+      "id": "86c342d6-40d8-4fcc-84a3-b98823a642d0",
       "name": "CISO Series"
     },
     {
@@ -146,7 +146,7 @@
         0,
         160
       ],
-      "id": "rss-cisa-001",
+      "id": "9c987673-afea-4f56-b536-5b1a8f3a5f56",
       "name": "CISA Cybersecurity Advisories"
     },
     {
@@ -160,7 +160,7 @@
         0,
         352
       ],
-      "id": "rss-unsupervised-001",
+      "id": "ee2f410d-f069-4bb7-980f-078f776d5a01",
       "name": "Unsupervised Learning"
     },
     {
@@ -174,7 +174,7 @@
           },
           "conditions": [
             {
-              "id": "date-check-cond-001",
+              "id": "fff4158a-5739-4aaf-973f-f07c716f4216",
               "leftValue": "={{ $json.isoDate }}",
               "rightValue": "={{ DateTime.now().minus(3, 'days') }}",
               "operator": {
@@ -193,7 +193,7 @@
         224,
         160
       ],
-      "id": "if-check-date-001",
+      "id": "96599ddb-38af-4627-a21d-a35d2e6c5503",
       "name": "Check Publication Date1"
     },
     {
@@ -207,7 +207,7 @@
           },
           "conditions": [
             {
-              "id": "date-check-cond-002",
+              "id": "fff4158a-5739-4aaf-973f-f07c716f4216",
               "leftValue": "={{ $json.isoDate }}",
               "rightValue": "={{ DateTime.now().minus(3, 'days') }}",
               "operator": {
@@ -226,7 +226,7 @@
         224,
         352
       ],
-      "id": "if-check-date-002",
+      "id": "43f8801e-8bc0-483b-b07b-27bd099266e9",
       "name": "Check Publication Date2"
     },
     {
@@ -234,49 +234,49 @@
         "assignments": {
           "assignments": [
             {
-              "id": "assign-title-001",
+              "id": "61fa4a20-164f-4d2b-9299-393edbe3055e",
               "name": "title",
               "value": "={{ $json.title }}",
               "type": "string"
             },
             {
-              "id": "assign-url-001",
+              "id": "ad792e9f-1047-4746-97a2-e353d83c3c16",
               "name": "url",
               "value": "={{ $json.link }}",
               "type": "string"
             },
             {
-              "id": "assign-pubdate-001",
+              "id": "bc03e04a-5700-45e6-b826-6a8bb08d88a7",
               "name": "pubDate",
               "value": "={{ $json.pubDate }}",
               "type": "string"
             },
             {
-              "id": "assign-content-001",
+              "id": "0dcb2bd3-8896-4556-bd49-cfe5a4924880",
               "name": "content",
               "value": "={{ $json.content }}",
               "type": "string"
             },
             {
-              "id": "assign-source-001",
+              "id": "40577eb4-1426-4d4e-b6af-31a1deba2d9b",
               "name": "source",
               "value": "\"CISA Cybersecurity Advisories\"",
               "type": "string"
             },
             {
-              "id": "assign-sourcetype-001",
+              "id": "7a91b11e-f439-400b-8040-bbba05085229",
               "name": "sourceType",
               "value": "\"advisory\"",
               "type": "string"
             },
             {
-              "id": "assign-guid-001",
+              "id": "00346595-494a-444e-8749-54ba0a7b48fb",
               "name": "guid",
               "value": "={{ $json.guid }}",
               "type": "string"
             },
             {
-              "id": "assign-author-001",
+              "id": "87cada0e-a0f1-4b83-8e7c-b325f53472ae",
               "name": "author",
               "value": "={{ $json['dc:creator'] }}",
               "type": "string"
@@ -291,7 +291,7 @@
         448,
         160
       ],
-      "id": "set-fields-001",
+      "id": "a316d93a-3fd9-4cfd-9720-6ee6bbc66354",
       "name": "Edit Fields1"
     },
     {
@@ -299,49 +299,49 @@
         "assignments": {
           "assignments": [
             {
-              "id": "assign-title-002",
+              "id": "61fa4a20-164f-4d2b-9299-393edbe3055e",
               "name": "title",
               "value": "={{ $json.title }}",
               "type": "string"
             },
             {
-              "id": "assign-url-002",
+              "id": "ad792e9f-1047-4746-97a2-e353d83c3c16",
               "name": "url",
               "value": "={{ $json.link }}",
               "type": "string"
             },
             {
-              "id": "assign-pubdate-002",
+              "id": "bc03e04a-5700-45e6-b826-6a8bb08d88a7",
               "name": "pubDate",
               "value": "={{ $json.pubDate }}",
               "type": "string"
             },
             {
-              "id": "assign-content-002",
+              "id": "0dcb2bd3-8896-4556-bd49-cfe5a4924880",
               "name": "content",
               "value": "={{ $json['content:encodedSnippet'] }}",
               "type": "string"
             },
             {
-              "id": "assign-source-002",
+              "id": "40577eb4-1426-4d4e-b6af-31a1deba2d9b",
               "name": "source",
               "value": "\"Daniel Miessler\"",
               "type": "string"
             },
             {
-              "id": "assign-sourcetype-002",
+              "id": "7a91b11e-f439-400b-8040-bbba05085229",
               "name": "sourceType",
               "value": "\"Blog\"",
               "type": "string"
             },
             {
-              "id": "assign-guid-002",
+              "id": "00346595-494a-444e-8749-54ba0a7b48fb",
               "name": "guid",
               "value": "={{ $json.guid }}",
               "type": "string"
             },
             {
-              "id": "assign-author-002",
+              "id": "87cada0e-a0f1-4b83-8e7c-b325f53472ae",
               "name": "author",
               "value": "={{ $('Unsupervised Learning').item.json.author }}",
               "type": "string"
@@ -356,7 +356,7 @@
         448,
         352
       ],
-      "id": "set-fields-002",
+      "id": "74547c77-e7bf-4611-951b-960a423c8a34",
       "name": "Edit Fields2"
     },
     {
@@ -370,7 +370,7 @@
         0,
         -32
       ],
-      "id": "rss-simply-cyber-001",
+      "id": "606996d6-5e62-4984-983a-ec0244ac4249",
       "name": "Simply Cyber Newsletter"
     },
     {
@@ -384,7 +384,7 @@
           },
           "conditions": [
             {
-              "id": "date-check-cond-003",
+              "id": "fff4158a-5739-4aaf-973f-f07c716f4216",
               "leftValue": "={{ $json.isoDate }}",
               "rightValue": "={{ DateTime.now().minus(3, 'days') }}",
               "operator": {
@@ -403,7 +403,7 @@
         224,
         544
       ],
-      "id": "if-check-date-003",
+      "id": "072a7f10-0024-4ae7-ac5a-ef6d06f3282b",
       "name": "Check Publication Date3"
     },
     {
@@ -411,43 +411,43 @@
         "assignments": {
           "assignments": [
             {
-              "id": "assign-title-003",
+              "id": "61fa4a20-164f-4d2b-9299-393edbe3055e",
               "name": "title",
               "value": "={{ $json.title }}",
               "type": "string"
             },
             {
-              "id": "assign-url-003",
+              "id": "ad792e9f-1047-4746-97a2-e353d83c3c16",
               "name": "url",
               "value": "={{ $json.link }}",
               "type": "string"
             },
             {
-              "id": "assign-pubdate-003",
+              "id": "bc03e04a-5700-45e6-b826-6a8bb08d88a7",
               "name": "pubDate",
               "value": "={{ $json.pubDate }}",
               "type": "string"
             },
             {
-              "id": "assign-content-003",
+              "id": "0dcb2bd3-8896-4556-bd49-cfe5a4924880",
               "name": "content",
               "value": "={{ $json['content:encoded'] }}",
               "type": "string"
             },
             {
-              "id": "assign-source-003",
+              "id": "40577eb4-1426-4d4e-b6af-31a1deba2d9b",
               "name": "source",
               "value": "\"CISO Series\"",
               "type": "string"
             },
             {
-              "id": "assign-sourcetype-003",
+              "id": "7a91b11e-f439-400b-8040-bbba05085229",
               "name": "sourceType",
               "value": "\"podcast\"",
               "type": "string"
             },
             {
-              "id": "assign-guid-003",
+              "id": "00346595-494a-444e-8749-54ba0a7b48fb",
               "name": "guid",
               "value": "={{ $json.guid }}",
               "type": "string"
@@ -462,7 +462,7 @@
         448,
         544
       ],
-      "id": "set-fields-003",
+      "id": "68e1fa12-7235-4f98-82a9-1f6c7bc86491",
       "name": "Edit Fields3"
     },
     {
@@ -476,7 +476,7 @@
           },
           "conditions": [
             {
-              "id": "date-check-cond-004",
+              "id": "fff4158a-5739-4aaf-973f-f07c716f4216",
               "leftValue": "={{ $json.isoDate }}",
               "rightValue": "={{ DateTime.now().minus(7, 'days') }}",
               "operator": {
@@ -495,7 +495,7 @@
         224,
         -32
       ],
-      "id": "if-check-date-004",
+      "id": "a1baa931-8953-43cd-b2b8-b67300998eb9",
       "name": "Check Publication Date"
     },
     {
@@ -503,49 +503,49 @@
         "assignments": {
           "assignments": [
             {
-              "id": "assign-title-004",
+              "id": "61fa4a20-164f-4d2b-9299-393edbe3055e",
               "name": "title",
               "value": "={{ $json.title }}",
               "type": "string"
             },
             {
-              "id": "assign-url-004",
+              "id": "ad792e9f-1047-4746-97a2-e353d83c3c16",
               "name": "url",
               "value": "={{ $json.link }}",
               "type": "string"
             },
             {
-              "id": "assign-pubdate-004",
+              "id": "bc03e04a-5700-45e6-b826-6a8bb08d88a7",
               "name": "pubDate",
               "value": "={{ $json.pubDate }}",
               "type": "string"
             },
             {
-              "id": "assign-content-004",
+              "id": "0dcb2bd3-8896-4556-bd49-cfe5a4924880",
               "name": "content",
               "value": "={{ $json['content:encodedSnippet'] }}",
               "type": "string"
             },
             {
-              "id": "assign-source-004",
+              "id": "40577eb4-1426-4d4e-b6af-31a1deba2d9b",
               "name": "source",
               "value": "\"Simply Cyber Newsletter\"",
               "type": "string"
             },
             {
-              "id": "assign-sourcetype-004",
+              "id": "7a91b11e-f439-400b-8040-bbba05085229",
               "name": "sourceType",
               "value": "\"Blog\"",
               "type": "string"
             },
             {
-              "id": "assign-guid-004",
+              "id": "00346595-494a-444e-8749-54ba0a7b48fb",
               "name": "guid",
               "value": "={{ $json.guid }}",
               "type": "string"
             },
             {
-              "id": "assign-author-004",
+              "id": "87cada0e-a0f1-4b83-8e7c-b325f53472ae",
               "name": "author",
               "value": "={{ $json['dc:creator'] }}",
               "type": "string"
@@ -560,7 +560,7 @@
         448,
         -32
       ],
-      "id": "set-fields-004",
+      "id": "cee802ce-0b8a-4c1c-9bef-65a1f9bd5505",
       "name": "Edit Fields"
     },
     {
@@ -573,7 +573,7 @@
         672,
         224
       ],
-      "id": "merge-feeds-001",
+      "id": "3568b11d-d5e5-426d-817c-0c6f30917ccb",
       "name": "Merge"
     },
     {
@@ -603,11 +603,11 @@
         2048,
         256
       ],
-      "id": "anthropic-label-rate-001",
+      "id": "ecc55df5-0b81-458a-a15c-1469824ccce6",
       "name": "fabric:label_and_rate",
       "credentials": {
         "anthropicApi": {
-          "id": "YOUR_ANTHROPIC_CREDENTIAL_ID",
+          "id": "ANTHROPIC_CREDENTIAL_ID",
           "name": "Anthropic account"
         }
       }
@@ -627,7 +627,7 @@
               "role": "assistant"
             },
             {
-              "content": "={{ $json.railsInput }}"
+              "content": "={{ $json.guardrailsInput }}"
             }
           ]
         },
@@ -639,11 +639,11 @@
         1696,
         256
       ],
-      "id": "anthropic-clean-text-001",
+      "id": "28a1d543-fee9-448d-be96-81987cd8019a",
       "name": "fabric:clean_text",
       "credentials": {
         "anthropicApi": {
-          "id": "YOUR_ANTHROPIC_CREDENTIAL_ID",
+          "id": "ANTHROPIC_CREDENTIAL_ID",
           "name": "Anthropic account"
         }
       }
@@ -658,22 +658,22 @@
         2400,
         256
       ],
-      "id": "code-process-notion-001",
+      "id": "c18fc102-0608-45b5-9340-b2bd3d4a88c3",
       "name": "Process for Notion"
     },
     {
       "parameters": {
         "text": "={{ $json.data }}",
-        "rails": {}
+        "guardrails": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.rails",
+      "type": "@n8n/n8n-nodes-langchain.guardrails",
       "typeVersion": 1,
       "position": [
         1344,
         256
       ],
-      "id": "rails-content-001",
-      "name": "Content rails",
+      "id": "78462e59-230b-447f-bdf2-469ff0843675",
+      "name": "Content Guardrails",
       "onError": "continueErrorOutput"
     },
     {
@@ -689,14 +689,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
       "typeVersion": 1.3,
       "position": [
-        1416,
+        1424,
         512
       ],
-      "id": "anthropic-chat-model-001",
+      "id": "427b1961-e24e-4041-ae50-675284757333",
       "name": "Anthropic Chat Model",
       "credentials": {
         "anthropicApi": {
-          "id": "YOUR_ANTHROPIC_CREDENTIAL_ID",
+          "id": "ANTHROPIC_CREDENTIAL_ID",
           "name": "Anthropic account"
         }
       }
@@ -745,14 +745,14 @@
       "main": [
         [
           {
-            "node": "Content rails",
+            "node": "Content Guardrails",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Content rails": {
+    "Content Guardrails": {
       "main": [
         [
           {
@@ -943,7 +943,7 @@
       "ai_languageModel": [
         [
           {
-            "node": "Content rails",
+            "node": "Content Guardrails",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -955,10 +955,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "public-release-v1",
+  "versionId": "60c00902-f384-4ddf-bda0-de7a2e48bcd1",
   "meta": {
-    "templateCredsSetupCompleted": false
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cf0703351384b163540100fb1c044c2a85b92c11e3a82c14988f3ddb668e311c"
   },
-  "id": "GRC-News-Assistant-Template",
+  "id": "REMOVED_WORKFLOW_ID",
   "tags": []
 }
