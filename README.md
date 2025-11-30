@@ -254,6 +254,65 @@ groups $USER
 sudo usermod -aG docker $USER
 sudo reboot
 ```
+### Install Docker Scout (Optional - Recommended)
+
+Docker Scout scans container images for vulnerabilities before deployment. The free tier includes up to 3 repositories.
+
+#### Docker Desktop (macOS/Windows)
+
+Docker Scout is **pre-installed** with Docker Desktop 4.17+. Just sign in to your Docker account:
+
+```bash
+# Verify Scout is available
+docker scout version
+
+# Login to Docker Hub (required for Scout)
+docker login
+```
+
+#### Linux (All Distros)
+
+```bash
+# Download and run the official install script
+curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh -o install-scout.sh
+
+# Review the script (recommended)
+less install-scout.sh
+
+# Run the installer
+sh install-scout.sh
+
+# Login to Docker Hub (required for Scout)
+docker login
+
+# Verify installation
+docker scout version
+```
+
+#### Verify Docker Scout is Working
+
+```bash
+# Quick scan of an image
+docker scout quickview nginx:latest
+
+# Expected output includes:
+# Image vulnerabilities summary and recommendations
+```
+
+#### Alternative: Run Scout as Container (No Installation)
+
+If you prefer not to install the CLI:
+
+```bash
+docker run -it \
+  -e DOCKER_SCOUT_HUB_USER=<your-dockerhub-username> \
+  -e DOCKER_SCOUT_HUB_PASSWORD=<your-dockerhub-token> \
+  docker/scout-cli quickview nginx:latest
+```
+
+> **Note:** Create a Docker Hub access token at https://hub.docker.com/settings/security rather than using your password.
+```
+
 ### n8n workflow and Notion
 
 1. **Clone the Repository**
