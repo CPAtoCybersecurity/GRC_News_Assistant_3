@@ -1016,9 +1016,7 @@ PostgreSQL and Redis are on an internal network with `internal: true` - they can
 The workflow includes three layers of defense:
 
 **Layer 1: Guardrails Node**
-- Jailbreak detection (0.7 threshold)
-- Instruction injection detection (0.6 threshold)
-- Topical alignment check (0.5 threshold)
+https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-langchain.guardrails/
 
 **Layer 2: Hardened System Prompts**
 ```
