@@ -299,9 +299,9 @@ _*Data Classification Scale: Public → Internal Use → Confidential → Sensit
 
 | #            | Question                                                                     | Yes (Lower Risk) | No (Higher Risk) | Not Applicable | Comments                              |
 | ------------ | ---------------------------------------------------------------------------- | ---------------- | ---------------- | -------------- | ------------------------------------- |
-| **RC.RP-01** | Are workflow backups maintained with version control?                        | X                |                  |                | GitHub + VM snapshots                 |
-| **RC.RP-02** | Can compromised workflows be isolated without affecting critical operations? | X                |                  |                | Non-critical news processing workflow |
-| **RC.RP-03** | Can the environment be restored to a known-good state quickly?               | X                |                  |                | VM snapshots enable rapid rollback    |
+| **RC.RP-01** | Are workflow backups maintained with version control?                        |                 |    X              |                | GitHub, but no VM snapshots                 |
+| **RC.RP-02** | Can compromised workflows be isolated without affecting critical operations? |  X               |                  |                | Non-critical news processing workflow |
+| **RC.RP-03** | Can the environment be restored to a known-good state quickly?               |                 |    X              |                | No VM snapshots    |
 
 ---
 
