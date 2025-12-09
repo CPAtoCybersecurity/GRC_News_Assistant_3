@@ -6,6 +6,8 @@
 
 An intelligent Governance, Risk, and Compliance (GRC) news aggregation system that automatically collects, analyzes, and rates cybersecurity content using AI to help security professionals focus on what matters most.
 
+![Simply Cyber Academy Logo](public/SC_SimplyCyberAcademy_color.png)
+
 ## Table of Contents
 
 - [Features](#features)
