@@ -1,3 +1,5 @@
+![Logo](public/SC_SimplyCyberAcademy.png)
+
 # GRC News Assistant 3.0
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -5,8 +7,6 @@
 [![Notion Integration](https://img.shields.io/badge/Notion-Integrated-black.svg)](https://notion.so)
 
 An intelligent Governance, Risk, and Compliance (GRC) news aggregation system that automatically collects, analyzes, and rates cybersecurity content using AI to help security professionals focus on what matters most.
-
-![Logo](public/SC_SimplyCyberAcademy.png)
 
 ## Table of Contents
 
