@@ -175,7 +175,7 @@ The system automatically applies relevant labels from:
 
 ### Prerequisites
 
-- Notion account with API access
+- Notion account with API access: https://notion.so/my-integrations
 - LLM API key (Anthropic Claude, OpenAI, Google Gemini, or local Ollama)
 - Terminal/command line access
 - [Docker Scout Setup](https://github.com/CPAtoCybersecurity/GRC_News_Assistant_3/blob/main/docs/docker-scout-setup.md)
