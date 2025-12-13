@@ -178,6 +178,7 @@ The system automatically applies relevant labels from:
 - Notion account with API access
 - LLM API key (Anthropic Claude, OpenAI, Google Gemini, or local Ollama)
 - Terminal/command line access
+- [Docker Scout Setup](https://github.com/CPAtoCybersecurity/GRC_News_Assistant_3/blob/main/docs/docker-scout-setup.md)
 
 ### Docker and Docker Compose
 
