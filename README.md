@@ -175,10 +175,10 @@ The system automatically applies relevant labels from:
 
 ### Prerequisites
 
+- Terminal/command line access
 - Notion account with API access: https://notion.so/my-integrations
 - LLM API key (Anthropic Claude, OpenAI, Google Gemini, or local Ollama)
-- Terminal/command line access
-- [Docker Scout Setup](https://github.com/CPAtoCybersecurity/GRC_News_Assistant_3/blob/main/docs/docker-scout-setup.md)
+- Docker Hub account (free): https://hub.docker.com/signup — required for Docker Scout vulnerability scanning
 
 ### Docker and Docker Compose
 
@@ -632,6 +632,7 @@ docker login
 
 This logs you into Docker Hub, which is required for Docker Scout to work. You'll be prompted for your Docker Hub username and password.
 
+> **Note for Linux users:** On Linux, you may need to configure environment variables for Scout authentication even after `docker login` succeeds. If you encounter authentication errors when running Scout commands, see the [full Docker Scout setup guide](docs/docker-scout-setup.md) for instructions on creating a Personal Access Token and configuring the `DOCKER_SCOUT_HUB_USER` and `DOCKER_SCOUT_HUB_PASSWORD` environment variables.
 ---
 
 #### Scanning Images
