@@ -324,6 +324,10 @@ _*Data Classification Scale: Public → Internal Use → Confidential → Sensit
 | **Patch management** | ⚠️ Manual | ⚠️ Manual (but scanned) | ✅ Vendor managed |
 | **Compliance controls** | ❌ None | ⚠️ Self-managed | ✅ SOC 2, etc. |
 
+#### Network Isolation Architecture
+
+![Network Isolation Architecture](network-isolation-architecture.png)
+
 ### Risk Reduction Summary
 
 | Deployment Model | Risk Reduction from Baseline | Residual Risk Level |
