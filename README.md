@@ -146,6 +146,8 @@ Once n8n is running, import the provided workflow file and connect it to your No
 
 ![GRC News Assistant 3.0 Workflow](risk_assessment/workflow.png)
 
+![n8n Deployment](risk_assessment/n8n_Deployment.png)
+
 ### Data Sources
 
 - **CISA Cybersecurity Advisories** - Official security alerts
