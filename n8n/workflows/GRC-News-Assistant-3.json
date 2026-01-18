@@ -958,7 +958,7 @@
   "versionId": "60c00902-f384-4ddf-bda0-de7a2e48bcd1",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "cf0703351384b163540100fb1c044c2a85b92c11e3a82c14988f3ddb668e311c"
+    "instanceId": "YOUR_INSTANCE_ID"
   },
   "id": "REMOVED_WORKFLOW_ID",
   "tags": []
