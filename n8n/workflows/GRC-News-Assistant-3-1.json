@@ -1,5 +1,5 @@
 {
-  "name": "GRC News Assistant Jan 17 v1",
+  "name": "GRC News Assistant 3.1",
   "nodes": [
     {
       "parameters": {
@@ -1066,8 +1066,8 @@
   "versionId": "27817edc-d1c5-452f-bf08-1421eb9f2de2",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "0a872e72451ffe8abc36ee049e15feb4a12e27295ee6a3e38bbc919efed41881"
+    "instanceId": "YOUR_INSTANCE_ID"
   },
-  "id": "REMOVED_WORKFLOW_ID",
+  "id": "YOUR_WORKFLOW_ID",
   "tags": []
 }

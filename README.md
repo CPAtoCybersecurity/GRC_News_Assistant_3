@@ -1,15 +1,27 @@
 ![Logo](public/SC_SimplyCyberAcademy.png)
 
-# GRC News Assistant 3.0
+# GRC News Assistant 3.1
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![n8n Compatible](https://img.shields.io/badge/n8n-Compatible-orange.svg)](https://n8n.io)
+[![n8n Compatible](https://img.shields.io/badge/n8n-2.0.0+-green.svg)](https://n8n.io)
 [![Notion Integration](https://img.shields.io/badge/Notion-Integrated-black.svg)](https://notion.so)
+[![Security Advisory](https://img.shields.io/badge/Security-Advisory-red.svg)](SECURITY-ADVISORY.md)
 
 An intelligent Governance, Risk, and Compliance (GRC) news aggregation system that automatically collects, analyzes, and rates cybersecurity content using AI to help security professionals focus on what matters most.
 
+> **⚠️ SECURITY NOTICE**: If you're running n8n versions prior to 2.0.0, please read our [Security Advisory](SECURITY-ADVISORY.md) immediately. Multiple critical vulnerabilities (CVSS 9.9-10.0) have been disclosed.
+
+## What's New in 3.1
+
+- **n8n 2.0.0+ Required**: Pinned to secure version addressing CVE-2025-68613, CVE-2026-21858, CVE-2025-68668, and CVE-2026-21877
+- **Enhanced Docker Compose**: Upgraded to `docker-compose-3-1.yml` with PostgreSQL 16-alpine and improved security comments
+- **Workflow Improvements**: Fixed pairedItem chain issues, improved error handling in Code nodes
+- **Removed Unused Fields**: Snippet field removed from Notion schema (streamlined output)
+- **Better Output Validation**: Enhanced JSON parsing with fallback handling
+
 ## Table of Contents
 
+- [What's New in 3.1](#whats-new-in-31)
 - [Features](#features)
 - [Quick Start](#quick-start)
 - [Rating System](#rating-system)
@@ -834,7 +846,6 @@ Access n8n at `http://localhost:5678`
    - `Published Date` (Date property)
    - `Processed Date` (Date property)
    - `Source` (Select property with options: CISA Cybersecurity Advisories, Simply Cyber Newsletter, Daniel Miessler, CISO Series)
-   - `Snippet` (Text property)
    - `Rating Explanation` (Text property)
 3. Copy your database ID from the URL: `notion.so/[workspace]/[database-id]?v=[view-id]`
 4. Share the database with your Notion integration
@@ -845,7 +856,7 @@ Access n8n at `http://localhost:5678`
 
 #### Step 1: Locate the Workflow File
 
-When you cloned the repository, the workflow file was saved to `n8n/workflows/GRC-News-Assistant-3.json`.
+When you cloned the repository, the workflow file was saved to `n8n/workflows/GRC-News-Assistant-3-1.json`.
 
 ---
 
@@ -853,7 +864,7 @@ When you cloned the repository, the workflow file was saved to `n8n/workflows/GR
 
 1. Open n8n interface at `http://localhost:5678`
 2. Go to **Workflows → Import from File**
-3. Select `GRC-News-Assistant-3.json`
+3. Select `GRC-News-Assistant-3-1.json`
 4. The workflow will import with broken credential connections (this is normal - you'll fix them next)
 
 ---
@@ -875,7 +886,7 @@ This is the easier approach - simply import the workflow and fix the connections
 
 **Option B: Edit JSON File Before Importing**
 
-If you prefer to pre-configure the file, open `GRC-News-Assistant-3.json` in a text editor and replace these placeholders:
+If you prefer to pre-configure the file, open `GRC-News-Assistant-3-1.json` in a text editor and replace these placeholders:
 
 - `YOUR_NOTION_DATABASE_ID` → Your actual Notion database ID (appears 2 times)
 - `NOTION_CREDENTIAL_ID` → Leave as-is (will be replaced when you connect credentials in n8n)
@@ -983,7 +994,6 @@ The `fabric:label_and_rate` node contains the AI prompt that:
 | Published Date | Date | Original publication date |
 | Processed Date | Date | When processed by workflow |
 | Source | Select | Which RSS feed |
-| Snippet | Text | Article excerpt (2000 char max) |
 | Rating Explanation | Text | AI's reasoning |
 
 ## AI Rating Themes
@@ -1101,7 +1111,7 @@ Before updating, scan new image versions for vulnerabilities. See [Pre-Deploymen
 docker compose pull
 ```
 
-This downloads the latest versions of all images defined in your `docker-compose.yml`.
+This downloads the latest versions of all images defined in your `docker-compose-3-1.yml`.
 
 ```bash
 docker compose down
