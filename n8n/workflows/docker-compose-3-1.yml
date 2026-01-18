@@ -1,0 +1,256 @@
+################################################################################
+# n8n Hardened Docker Compose Configuration
+#
+# Security-focused deployment for self-hosted n8n with:
+# - Container hardening (non-root, read-only, capability dropping)
+# - Network isolation
+# - Resource limits
+# - Secrets management via environment file
+# - Health monitoring
+#
+# SECURITY UPDATE: January 2026
+# - Pinned to n8n 2.0.0+ to address critical vulnerabilities
+# - See SECURITY-ADVISORY.md for CVE details
+#
+# Author: GRC News Assistant Project
+# License: MIT
+################################################################################
+
+services:
+  #=============================================================================
+  # PostgreSQL Database
+  #=============================================================================
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    user: "70:70"  # postgres user in alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-n8n}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:-n8n}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-n8n} -d ${POSTGRES_DB:-n8n}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - n8n-internal
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          memory: 128M
+
+  #=============================================================================
+  # Redis Cache (for scaling/queue management)
+  #=============================================================================
+  redis:
+    # SECURITY: Use redis:alpine, NOT redis:7-alpine
+    # redis:7-alpine has 4 critical + 39 high CVEs due to outdated Go stdlib
+    # See: risk_assessment/n8n-Docker-Image-Security-Assessment.md
+    image: redis:alpine
+    restart: unless-stopped
+    user: "999:999"  # redis user
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+      --maxmemory 128mb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - n8n-internal
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          memory: 64M
+
+  #=============================================================================
+  # n8n Workflow Automation Platform
+  #=============================================================================
+  n8n:
+    #---------------------------------------------------------------------------
+    # CRITICAL SECURITY: Pin to n8n 2.0.0 or later
+    #---------------------------------------------------------------------------
+    # DO NOT use versions prior to 2.0.0 - they contain critical vulnerabilities:
+    # - CVE-2025-68613 (CVSS 9.9): RCE via expression injection
+    # - CVE-2026-21858 (CVSS 10.0): Unauthenticated RCE "Ni8mare"
+    # - CVE-2025-68668 (CVSS 9.9): Sandbox bypass "N8scape"
+    # - CVE-2026-21877 (CVSS 10.0): Dangerous file upload
+    #
+    # Version 2.0.0 includes security hardening with:
+    # - Task runners enabled by default (isolated code execution)
+    # - Environment variables blocked from Code nodes
+    # - Dangerous execution nodes disabled by default
+    #
+    # Check for updates: https://github.com/n8n-io/n8n/releases
+    #---------------------------------------------------------------------------
+    image: n8nio/n8n:${N8N_VERSION:-2.0.0}
+    restart: unless-stopped
+
+    #---------------------------------------------------------------------------
+    # Security Hardening
+    #---------------------------------------------------------------------------
+    user: "1000:1000"  # Run as non-root (node user in n8n image)
+    read_only: true    # Read-only root filesystem
+
+    # Writable directories (required for operation)
+    tmpfs:
+      - /tmp:mode=1777,size=100M
+      - /home/node/.cache:uid=1000,gid=1000,mode=0755,size=100M
+
+    # Security options
+    security_opt:
+      - no-new-privileges:true  # Prevent privilege escalation
+
+    # Drop all capabilities - n8n doesn't need any
+    cap_drop:
+      - ALL
+
+    #---------------------------------------------------------------------------
+    # Resource Limits
+    #---------------------------------------------------------------------------
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+    #---------------------------------------------------------------------------
+    # Network Configuration
+    #---------------------------------------------------------------------------
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    networks:
+      - n8n-internal
+      - n8n-external  # For webhook access if needed
+
+    #---------------------------------------------------------------------------
+    # Environment Configuration
+    #---------------------------------------------------------------------------
+    environment:
+      # Database
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB:-n8n}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER:-n8n}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+
+      # Redis
+      - EXECUTIONS_MODE=queue
+      - QUEUE_BULL_REDIS_HOST=redis
+      - QUEUE_BULL_REDIS_PORT=6379
+      - QUEUE_BULL_REDIS_PASSWORD=${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+
+      # n8n Core Config
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+      - WEBHOOK_URL=${WEBHOOK_URL:-http://localhost:5678/}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:?N8N_ENCRYPTION_KEY is required}
+
+      # Authentication (use reverse proxy + OAuth in production)
+      - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE:-true}
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:-admin}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:?N8N_BASIC_AUTH_PASSWORD is required}
+
+      # Execution Data Retention
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=all
+      - EXECUTIONS_DATA_SAVE_ON_PROGRESS=true
+      - EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS=true
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=168  # 7 days in hours
+
+      # Logging & Monitoring
+      - N8N_LOG_LEVEL=${N8N_LOG_LEVEL:-info}
+      - N8N_LOG_OUTPUT=console
+      - N8N_METRICS=true
+      - N8N_METRICS_PREFIX=${N8N_METRICS_PREFIX:-n8n_}
+
+      # Security Settings (n8n 2.0 defaults are more secure)
+      - N8N_PAYLOAD_SIZE_MAX=${N8N_PAYLOAD_SIZE_MAX:-16}
+      - N8N_PERSONALIZATION_ENABLED=false
+      - N8N_DIAGNOSTICS_ENABLED=false
+      - N8N_VERSION_NOTIFICATIONS_ENABLED=true  # Enable to get security alerts
+
+      # Disable features that increase attack surface (enable as needed)
+      - N8N_TEMPLATES_ENABLED=${N8N_TEMPLATES_ENABLED:-false}
+      - EXTERNAL_HOOK_FILES=
+
+    #---------------------------------------------------------------------------
+    # Volumes
+    #---------------------------------------------------------------------------
+    volumes:
+      # Persistent data
+      - n8n_data:/home/node/.n8n
+
+      # Optional: Mount custom workflows/credentials as read-only
+      # - ./workflows:/workflows:ro
+      # - ./credentials:/credentials:ro
+
+    #---------------------------------------------------------------------------
+    # Dependencies
+    #---------------------------------------------------------------------------
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+    #---------------------------------------------------------------------------
+    # Health Check
+    #---------------------------------------------------------------------------
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:5678/healthz || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+#===============================================================================
+# Volumes
+#===============================================================================
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  n8n_data:
+    driver: local
+
+#===============================================================================
+# Networks
+#===============================================================================
+networks:
+  # Internal network - no external access
+  n8n-internal:
+    driver: bridge
+    internal: true  # No internet access for postgres/redis
+
+  # External network - for n8n to reach webhooks and APIs
+  n8n-external:
+    driver: bridge
