@@ -9,6 +9,9 @@
 
 An intelligent Governance, Risk, and Compliance (GRC) news aggregation system that automatically collects, analyzes, and rates cybersecurity content using AI to help security professionals focus on what matters most.
 
+[![Watch the Video](https://img.youtube.com/vi/a-_Y_Rpt88U/maxresdefault.jpg)](https://www.youtube.com/watch?v=a-_Y_Rpt88U)
+*▶️ Click to watch the GRC News Assistant walkthrough*
+
 > **⚠️ SECURITY NOTICE**: If you're running n8n versions prior to 2.0.0, please read our [Security Advisory](SECURITY-ADVISORY.md) immediately. Multiple critical vulnerabilities (CVSS 9.9-10.0) have been disclosed.
 
 ## What's New in 3.1
