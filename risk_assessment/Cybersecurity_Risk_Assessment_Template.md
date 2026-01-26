@@ -9,7 +9,7 @@
 - [ ] Periodic
 - [ ] Change-Triggered  
 
-**Deployment Model:**
+**Deployment Model ("Lethal Trifecta" check):**
 - [ ] Self-hosted
 - [ ] Cloud
 - [ ] Hybrid 
