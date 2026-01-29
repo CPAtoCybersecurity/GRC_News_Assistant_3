@@ -14,10 +14,10 @@
 - [ ] Cloud
 - [ ] Hybrid 
 
-**Design ("Lethal Trifecta" check)****:**
-- [ ] **Private data access** (databases, APIs, files)
-- [ ] **Untrusted input** (webhooks, emails, public APIs)
-- [ ] **External communication** (HTTP requests, emails)
+**Design ("Lethal Trifecta" check)**:**
+- [ ] **Private data access** (e.g. databases, emails, APIs, files)
+- [ ] **Untrusted input** (webhooks, emails, Slack, public APIs)
+- [ ] **External communication** (HTTP requests, posting to GitHub, Slack, emails)
 
 **Residual Risk:**
 
