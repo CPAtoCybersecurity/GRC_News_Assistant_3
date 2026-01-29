@@ -9,12 +9,12 @@
 - [ ] Periodic
 - [ ] Change-Triggered  
 
-**Deployment Model ("Lethal Trifecta" check):**
+**Deployment Model:**
 - [ ] Self-hosted
 - [ ] Cloud
 - [ ] Hybrid 
 
-**Design:**
+**Design ("Lethal Trifecta" check)****:**
 - [ ] **Private data access** (databases, APIs, files)
 - [ ] **Untrusted input** (webhooks, emails, public APIs)
 - [ ] **External communication** (HTTP requests, emails)
