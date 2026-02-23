@@ -9,6 +9,9 @@
 
 An intelligent Governance, Risk, and Compliance (GRC) news aggregation system that automatically collects, analyzes, and rates cybersecurity content using AI to help security professionals focus on what matters most.
 
+[![Watch the Video](https://img.youtube.com/vi/rZ2L_JlSAUI/maxresdefault.jpg)](https://www.youtube.com/watch?v=rZ2L_JlSAUI)
+*▶️ Click to watch AI Agent Security for GRC Professionals: Container Hardening & Risk Assessment Follow Along*
+
 [![Watch the Video](https://img.youtube.com/vi/a-_Y_Rpt88U/maxresdefault.jpg)](https://www.youtube.com/watch?v=a-_Y_Rpt88U)
 *▶️ Click to watch pointy clicky installation video*
 
