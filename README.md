@@ -200,7 +200,7 @@ The system automatically applies relevant labels from:
 - LLM API key (Anthropic Claude, OpenAI, Google Gemini, or local Ollama)
 - Docker Hub account (free): https://hub.docker.com/signup — required for Docker Scout vulnerability scanning
 
-### Docker and Docker Compose
+### Installing Docker and Docker Compose
 
 **Jump to your operating system:**
 - [Linux (Ubuntu)](#linux-ubuntu)
@@ -730,7 +730,7 @@ For a comprehensive security assessment of the n8n image, see the [n8n Docker Im
 
 ---
 
-### n8n Workflow and Notion
+### Installing n8n, Downloading the Workflow and Setting Up Notion
 
 #### Step 1: Clone the Repository
 
